@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMetricsCounter();
   initCaseStudyModal();
   initBackgroundMusic();
+  initHeroTypewriter();
 });
 
 /* --------------------------------------------------------------------------
@@ -1402,5 +1403,54 @@ function initBackgroundMusic() {
     }
   });
 }
+
+/* --------------------------------------------------------------------------
+   17. Hero Animated Typewriter (Dynamic Roles)
+   -------------------------------------------------------------------------- */
+function initHeroTypewriter() {
+  const el = document.getElementById('hero-typewriter');
+  if (!el) return;
+
+  const roles = [
+    'AI Full-Stack Systems',
+    'Next.js 15 & TypeScript Apps',
+    'YOLOv8 Edge Computer Vision',
+    'High-Concurrency Redis Engines',
+    'Distributed Real-Time Platforms'
+  ];
+
+  let roleIdx = 0;
+  let charIdx = 0;
+  let isDeleting = false;
+  let typeSpeed = 75;
+
+  function typeTick() {
+    const current = roles[roleIdx];
+
+    if (isDeleting) {
+      el.textContent = current.substring(0, charIdx - 1);
+      charIdx--;
+      typeSpeed = 35;
+    } else {
+      el.textContent = current.substring(0, charIdx + 1);
+      charIdx++;
+      typeSpeed = 75;
+    }
+
+    if (!isDeleting && charIdx === current.length) {
+      typeSpeed = 1900;
+      isDeleting = true;
+    } else if (isDeleting && charIdx === 0) {
+      isDeleting = false;
+      roleIdx = (roleIdx + 1) % roles.length;
+      typeSpeed = 400;
+    }
+
+    setTimeout(typeTick, typeSpeed);
+  }
+
+  typeTick();
+}
+
 
 
