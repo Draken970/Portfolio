@@ -43,8 +43,14 @@
       </nav>
 
       <div class="nav-actions">
-        <button id="sfx-toggle-btn" class="btn-sfx-toggle" title="Toggle Futuristic Sci-Fi Audio" aria-label="Toggle Sound Effects">
-          <span id="sfx-icon">🔇</span> <span id="sfx-label">SFX OFF</span>
+        <button id="bgm-toggle-btn" class="btn-bgm-toggle" title="Toggle Chill Background Music" aria-label="Toggle Background Music">
+          <span class="eq-visualizer">
+            <span class="eq-bar bar-1"></span>
+            <span class="eq-bar bar-2"></span>
+            <span class="eq-bar bar-3"></span>
+            <span class="eq-bar bar-4"></span>
+          </span>
+          <span id="bgm-label">MUSIC</span>
         </button>
         <button class="btn-terminal-toggle" title="Open Interactive CLI Terminal" aria-label="Open Terminal">
           <span>&gt;_</span> CLI
@@ -1111,6 +1117,11 @@ export default async function InventoryPage() {
       </div>
     </div>
   </footer>
+
+  <!-- Background Ambient Music Player -->
+  <audio id="bgm-player" loop preload="auto">
+    <source src="assets/audio/bgm.mp3" type="audio/mp3">
+  </audio>
 
   <!-- Scripts -->
   <script src="js/app.js"></script>

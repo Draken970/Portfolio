@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSmoothScroll();
   initMetricsCounter();
   initCaseStudyModal();
-  initWebAudioSFX();
+  initBackgroundMusic();
 });
 
 /* --------------------------------------------------------------------------
@@ -1297,121 +1297,110 @@ if (result.matchedCount === 0) {
 }
 
 /* --------------------------------------------------------------------------
-   18. Web Audio API Sci-Fi Sound Synthesizer (Zero External Audio Assets)
+   16. Background Ambient Music Player (Synthwave & Ambient Drone Fallback)
    -------------------------------------------------------------------------- */
-function initWebAudioSFX() {
-  const toggleBtn = document.getElementById('sfx-toggle-btn');
-  const sfxIcon = document.getElementById('sfx-icon');
-  const sfxLabel = document.getElementById('sfx-label');
-  let audioCtx = null;
-  let sfxEnabled = false;
+function initBackgroundMusic() {
+  const toggleBtn = document.getElementById('bgm-toggle-btn');
+  const bgmLabel = document.getElementById('bgm-label');
+  const audioEl = document.getElementById('bgm-player');
+  let isPlaying = false;
+  let synthEngine = null;
 
-  function getAudioContext() {
-    if (!audioCtx) {
+  if (!toggleBtn) return;
+
+  // Gentle, non-intrusive ambient background volume
+  if (audioEl) {
+    audioEl.volume = 0.35;
+  }
+
+  // Generative ambient drone fallback (Web Audio API)
+  function createAmbientDrone() {
+    try {
       const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-      if (AudioContextClass) {
-        audioCtx = new AudioContextClass();
-      }
-    }
-    if (audioCtx && audioCtx.state === 'suspended') {
-      audioCtx.resume();
-    }
-    return audioCtx;
-  }
+      if (!AudioContextClass) return null;
+      const ctx = new AudioContextClass();
+      if (ctx.state === 'suspended') ctx.resume();
 
-  function playSound(type) {
-    if (!sfxEnabled) return;
-    const ctx = getAudioContext();
-    if (!ctx) return;
+      const masterGain = ctx.createGain();
+      masterGain.gain.setValueAtTime(0.01, ctx.currentTime);
+      masterGain.gain.exponentialRampToValueAtTime(0.07, ctx.currentTime + 2.5);
 
-    const now = ctx.currentTime;
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(450, ctx.currentTime);
 
-    if (type === 'click') {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(600, now);
-      osc.frequency.exponentialRampToValueAtTime(300, now + 0.04);
-      gain.gain.setValueAtTime(0.04, now);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(now);
-      osc.stop(now + 0.04);
-    } else if (type === 'tick') {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(880, now);
-      gain.gain.setValueAtTime(0.02, now);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.03);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(now);
-      osc.stop(now + 0.03);
-    } else if (type === 'tab') {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(440, now);
-      osc.frequency.exponentialRampToValueAtTime(700, now + 0.06);
-      gain.gain.setValueAtTime(0.03, now);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(now);
-      osc.stop(now + 0.06);
-    } else if (type === 'modal') {
-      [523.25, 659.25, 783.99].forEach((freq, idx) => {
+      // Warm ambient chord progression (Dm9)
+      const freqs = [146.83, 174.61, 220.00, 261.63, 329.63];
+      const oscs = freqs.map((f, i) => {
         const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, now + idx * 0.04);
-        gain.gain.setValueAtTime(0.025, now + idx * 0.04);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.04 + 0.12);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now + idx * 0.04);
-        osc.stop(now + idx * 0.04 + 0.12);
+        osc.type = i % 2 === 0 ? 'sine' : 'triangle';
+        osc.frequency.setValueAtTime(f, ctx.currentTime);
+        osc.connect(filter);
+        osc.start();
+        return osc;
       });
-    } else if (type === 'action') {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(220, now);
-      osc.frequency.exponentialRampToValueAtTime(880, now + 0.1);
-      gain.gain.setValueAtTime(0.03, now);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(now);
-      osc.stop(now + 0.1);
+
+      filter.connect(masterGain);
+      masterGain.connect(ctx.destination);
+
+      return {
+        stop: () => {
+          try {
+            masterGain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.8);
+            setTimeout(() => {
+              oscs.forEach(o => { try { o.stop(); } catch(e) {} });
+              try { ctx.close(); } catch(e) {}
+            }, 900);
+          } catch(e) {}
+        }
+      };
+    } catch (e) {
+      console.warn('Web Audio ambient fallback error:', e);
+      return null;
     }
   }
 
-  window.playPortfolioSFX = playSound;
+  async function playMusic() {
+    isPlaying = true;
+    toggleBtn.classList.add('playing');
+    if (bgmLabel) bgmLabel.textContent = 'MUSIC: ON';
 
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', () => {
-      sfxEnabled = !sfxEnabled;
-      if (sfxEnabled) {
-        toggleBtn.classList.add('active');
-        if (sfxIcon) sfxIcon.textContent = '🔊';
-        if (sfxLabel) sfxLabel.textContent = 'SFX ON';
-        getAudioContext();
-        playSound('modal');
-      } else {
-        toggleBtn.classList.remove('active');
-        if (sfxIcon) sfxIcon.textContent = '🔇';
-        if (sfxLabel) sfxLabel.textContent = 'SFX OFF';
+    if (audioEl) {
+      try {
+        await audioEl.play();
+        return;
+      } catch (err) {
+        console.warn('MP3 play interrupted or blocked, using ambient synth fallback:', err);
       }
-    });
+    }
+
+    if (!synthEngine) {
+      synthEngine = createAmbientDrone();
+    }
   }
 
-  document.addEventListener('click', (e) => {
-    if (e.target.closest('button, .term-chip, .filter-btn, .arch-node-item')) {
-      playSound('click');
+  function pauseMusic() {
+    isPlaying = false;
+    toggleBtn.classList.remove('playing');
+    if (bgmLabel) bgmLabel.textContent = 'MUSIC: OFF';
+
+    if (audioEl) {
+      try { audioEl.pause(); } catch(e) {}
+    }
+
+    if (synthEngine) {
+      synthEngine.stop();
+      synthEngine = null;
+    }
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    if (isPlaying) {
+      pauseMusic();
+    } else {
+      playMusic();
     }
   });
 }
+
 
