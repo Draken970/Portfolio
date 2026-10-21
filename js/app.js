@@ -782,7 +782,7 @@ Available commands:
   <span style="color:#915eff">projects</span>      - Real-world production & systems builds
   <span style="color:#915eff">experience</span>    - AutoWhat internship & SFIT education
   <span style="color:#915eff">architecture</span>  - Redis atomic locks & edge AI RTSP pipelines
-  <span style="color:#915eff">contact</span>       - Email, phone & GitHub links
+  <span style="color:#915eff">contact</span>       - Email & GitHub links
   <span style="color:#915eff">resume</span>        - Full resume details & credentials
   <span style="color:#915eff">clear</span>         - Clear terminal screen
   <span style="color:#915eff">exit</span>          - Close terminal
@@ -843,7 +843,6 @@ Currently an on-site Full Stack Developer Intern at AutoWhat building Next.js 15
         printLine(`
 <span style="color:#915eff; font-weight:700">CONTACT INFO:</span>
 • Email: <a href="mailto:sarveshwadkar33@gmail.com" style="color:#c4b5fd;text-decoration:underline;">sarveshwadkar33@gmail.com</a>
-• Phone: +91 9321784816
 • GitHub: <a href="https://github.com/Draken970" target="_blank" style="color:#c4b5fd;text-decoration:underline;">github.com/Draken970</a>
 • Location: Mumbai, Maharashtra, India
         `);
