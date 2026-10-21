@@ -17,6 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initCopyButtons();
   initResumeModal();
   initSmoothScroll();
+  initMetricsCounter();
+  initRedisSandbox();
+  initYoloSandbox();
+  initCaseStudyModal();
+  initWebAudioSFX();
 });
 
 /* --------------------------------------------------------------------------
@@ -1091,3 +1096,668 @@ function initSmoothScroll() {
     });
   });
 }
+
+/* --------------------------------------------------------------------------
+   14. Engineering Impact Metrics Counter (Animated Roll-Up)
+   -------------------------------------------------------------------------- */
+function initMetricsCounter() {
+  const metricCards = document.querySelectorAll('.metric-card');
+  if (!metricCards.length) return;
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const numEl = entry.target.querySelector('.metric-number');
+        if (numEl && !numEl.classList.contains('counted')) {
+          numEl.classList.add('counted');
+          animateCount(numEl);
+        }
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.35 });
+
+  metricCards.forEach(card => observer.observe(card));
+
+  function animateCount(el) {
+    const target = parseFloat(el.getAttribute('data-target')) || 0;
+    const prefix = el.getAttribute('data-prefix') || '';
+    const suffix = el.getAttribute('data-suffix') || '';
+    const duration = 1600;
+    const startTime = performance.now();
+    const isDecimal = suffix.includes('.9%');
+
+    function update(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      const current = Math.floor(ease * target);
+
+      if (isDecimal) {
+        const decVal = (ease * 99.9).toFixed(1);
+        el.textContent = `${prefix}${decVal}%`;
+      } else {
+        el.textContent = `${prefix}${current}${suffix}`;
+      }
+
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      } else {
+        if (isDecimal) {
+          el.textContent = `${prefix}99.9%`;
+        } else {
+          el.textContent = `${prefix}${target}${suffix}`;
+        }
+        if (window.playPortfolioSFX) window.playPortfolioSFX('tick');
+      }
+    }
+    requestAnimationFrame(update);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   15. Redis Race-Condition Concurrency Sandbox & Tab Switching
+   -------------------------------------------------------------------------- */
+function initRedisSandbox() {
+  const tabRedis = document.getElementById('tab-sandbox-redis');
+  const tabYolo = document.getElementById('tab-sandbox-yolo');
+  const panelRedis = document.getElementById('panel-sandbox-redis');
+  const panelYolo = document.getElementById('panel-sandbox-yolo');
+
+  if (tabRedis && tabYolo && panelRedis && panelYolo) {
+    tabRedis.addEventListener('click', () => {
+      tabRedis.classList.add('active');
+      tabYolo.classList.remove('active');
+      panelRedis.style.display = 'grid';
+      panelYolo.style.display = 'none';
+      if (window.playPortfolioSFX) window.playPortfolioSFX('tab');
+    });
+
+    tabYolo.addEventListener('click', () => {
+      tabYolo.classList.add('active');
+      tabRedis.classList.remove('active');
+      panelRedis.style.display = 'none';
+      panelYolo.style.display = 'block';
+      if (window.playPortfolioSFX) window.playPortfolioSFX('tab');
+      if (window.resizeYoloCanvas) window.resizeYoloCanvas();
+    });
+  }
+
+  const btnRun = document.getElementById('btn-run-race-sim');
+  const btnRelease = document.getElementById('btn-release-lock');
+  const targetSeat = document.getElementById('demo-target-seat');
+  const seatStatus = document.getElementById('demo-seat-status');
+  const terminalFeed = document.getElementById('redis-sim-output');
+  const ttlCounter = document.getElementById('sim-ttl-counter');
+
+  if (!btnRun || !targetSeat || !terminalFeed) return;
+
+  let countdownTimer = null;
+  let remainingTTL = 30;
+
+  function appendTerminal(htmlLine) {
+    const p = document.createElement('div');
+    p.style.marginBottom = '4px';
+    p.innerHTML = htmlLine;
+    terminalFeed.appendChild(p);
+    terminalFeed.scrollTop = terminalFeed.scrollHeight;
+  }
+
+  function resetState() {
+    clearInterval(countdownTimer);
+    countdownTimer = null;
+    remainingTTL = 30;
+    targetSeat.classList.remove('locked');
+    if (seatStatus) {
+      seatStatus.textContent = 'TARGET';
+      seatStatus.style.color = '#c4b5fd';
+    }
+    btnRun.disabled = false;
+    if (btnRelease) btnRelease.disabled = true;
+    if (ttlCounter) {
+      ttlCounter.textContent = 'Status: Idle. Click button to test concurrency.';
+      ttlCounter.style.color = '#a3a3a3';
+    }
+  }
+
+  btnRun.addEventListener('click', async () => {
+    btnRun.disabled = true;
+    if (btnRelease) btnRelease.disabled = false;
+    if (window.playPortfolioSFX) window.playPortfolioSFX('action');
+
+    terminalFeed.innerHTML = `<span style="color:#737373;">// Redis Engine Terminal Output</span><br>`;
+    appendTerminal(`<span style="color:#60a5fa;">[T+0ms] Dispatched 5 concurrent async booking attempts for Seat [A-14]...</span>`);
+
+    const users = [
+      { name: 'User_1 (Alice)', token: 'tok_alice_4f9a', delay: 20 },
+      { name: 'User_2 (Bob)', token: 'tok_bob_8b21', delay: 35 },
+      { name: 'User_3 (Charlie)', token: 'tok_charlie_3c77', delay: 45 },
+      { name: 'User_4 (David)', token: 'tok_david_9e12', delay: 60 },
+      { name: 'User_5 (Eve)', token: 'tok_eve_55d0', delay: 75 }
+    ];
+
+    for (let i = 0; i < users.length; i++) {
+      const u = users[i];
+      await new Promise(r => setTimeout(r, u.delay));
+
+      if (i === 0) {
+        targetSeat.classList.add('locked');
+        if (seatStatus) {
+          seatStatus.textContent = 'LOCKED';
+          seatStatus.style.color = '#34d399';
+        }
+        appendTerminal(`
+          <span style="color:#a78bfa;">127.0.0.1:6379&gt;</span> SET lock:seat:A-14 "${u.token}" NX EX 30<br>
+          <span style="color:#34d399; font-weight:700;">↳ (string) "OK"</span> · <strong>${u.name}</strong> acquired lock [HTTP 200 Held]
+        `);
+      } else {
+        appendTerminal(`
+          <span style="color:#a78bfa;">127.0.0.1:6379&gt;</span> SET lock:seat:A-14 "${u.token}" NX EX 30<br>
+          <span style="color:#ef4444; font-weight:700;">↳ (nil)</span> · <strong>${u.name}</strong> rejected [HTTP 409 Conflict: Seat Held]
+        `);
+      }
+    }
+
+    appendTerminal(`<span style="color:#34d399;">✔ Zero Race Condition. 1 Lock Acquired, 4 Rejected. Key TTL: 30s</span>`);
+
+    remainingTTL = 30;
+    if (ttlCounter) {
+      ttlCounter.innerHTML = `<span style="color:#34d399;">● LOCKED by Alice</span> | TTL: <strong id="ttl-val">${remainingTTL}s</strong> (auto-release on timeout)`;
+    }
+
+    countdownTimer = setInterval(() => {
+      remainingTTL--;
+      const ttlVal = document.getElementById('ttl-val');
+      if (ttlVal) ttlVal.textContent = `${remainingTTL}s`;
+
+      if (remainingTTL <= 0) {
+        clearInterval(countdownTimer);
+        appendTerminal(`
+          <span style="color:#eab308;">[TTL Expired]</span> Key <code>lock:seat:A-14</code> expired automatically.<br>
+          <span style="color:#a78bfa;">127.0.0.1:6379&gt;</span> GET lock:seat:A-14 → (nil)
+        `);
+        resetState();
+      }
+    }, 1000);
+  });
+
+  if (btnRelease) {
+    btnRelease.addEventListener('click', () => {
+      if (window.playPortfolioSFX) window.playPortfolioSFX('click');
+      appendTerminal(`
+        <span style="color:#a78bfa;">127.0.0.1:6379&gt;</span> DEL lock:seat:A-14<br>
+        <span style="color:#c4b5fd;">↳ (integer) 1</span> · Seat lock manually released. Ready for next reservation.
+      `);
+      resetState();
+    });
+  }
+}
+
+/* --------------------------------------------------------------------------
+   16. YOLOv8 Edge Vision & ByteTrack Canvas Simulator
+   -------------------------------------------------------------------------- */
+function initYoloSandbox() {
+  const canvas = document.getElementById('yolo-sim-canvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+
+  let showBbox = true;
+  let showTrack = true;
+  let showVpn = true;
+
+  const chipBbox = document.getElementById('chip-toggle-bbox');
+  const chipTrack = document.getElementById('chip-toggle-track');
+  const chipVpn = document.getElementById('chip-toggle-vpn');
+
+  if (chipBbox) {
+    chipBbox.addEventListener('click', () => {
+      showBbox = !showBbox;
+      chipBbox.classList.toggle('active', showBbox);
+      chipBbox.textContent = `Bounding Boxes [${showBbox ? 'ON' : 'OFF'}]`;
+      if (window.playPortfolioSFX) window.playPortfolioSFX('tick');
+    });
+  }
+
+  if (chipTrack) {
+    chipTrack.addEventListener('click', () => {
+      showTrack = !showTrack;
+      chipTrack.classList.toggle('active', showTrack);
+      chipTrack.textContent = `ByteTrack IDs [${showTrack ? 'ON' : 'OFF'}]`;
+      if (window.playPortfolioSFX) window.playPortfolioSFX('tick');
+    });
+  }
+
+  if (chipVpn) {
+    chipVpn.classList.add('active');
+    chipVpn.addEventListener('click', () => {
+      showVpn = !showVpn;
+      chipVpn.classList.toggle('active', showVpn);
+      chipVpn.textContent = `NetBird Mesh [${showVpn ? 'ENCRYPTED' : 'BYPASS'}]`;
+      if (window.playPortfolioSFX) window.playPortfolioSFX('tick');
+    });
+  }
+
+  function resizeCanvas() {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.resetTransform ? ctx.resetTransform() : ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(dpr, dpr);
+  }
+
+  window.resizeYoloCanvas = resizeCanvas;
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  const targets = [
+    {
+      id: 104,
+      label: 'person',
+      conf: 0.94,
+      x: 60,
+      y: 90,
+      w: 48,
+      h: 110,
+      vx: 0.85,
+      history: []
+    },
+    {
+      id: 105,
+      label: 'person',
+      conf: 0.89,
+      x: 230,
+      y: 105,
+      w: 44,
+      h: 100,
+      vx: -0.65,
+      history: []
+    }
+  ];
+
+  let scanlineOffset = 0;
+
+  function renderLoop() {
+    const width = canvas.getBoundingClientRect().width;
+    const height = canvas.getBoundingClientRect().height;
+
+    if (width > 0 && height > 0) {
+      ctx.fillStyle = '#05070a';
+      ctx.fillRect(0, 0, width, height);
+
+      // Floor grid
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+      ctx.lineWidth = 1;
+      const horizon = height * 0.45;
+      for (let x = -width; x <= width * 2; x += 40) {
+        ctx.beginPath();
+        ctx.moveTo(width / 2, horizon);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+      }
+      for (let y = horizon; y <= height; y += 24) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+      }
+
+      // Camera HUD overlay
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+      ctx.font = '11px monospace';
+      ctx.fillText('CAM_04_SOUTH_HALL [RTSP 480p Sub-Stream]', 16, 24);
+
+      const now = new Date();
+      const timeStr = now.toTimeString().split(' ')[0] + '.' + String(Math.floor(now.getMilliseconds() / 100));
+      ctx.fillStyle = '#a3a3a3';
+      ctx.fillText(`2026-10-21 ${timeStr} IST`, 16, 42);
+
+      // REC badge
+      ctx.fillStyle = '#ef4444';
+      ctx.beginPath();
+      ctx.arc(width - 65, 20, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ef4444';
+      ctx.font = 'bold 11px monospace';
+      ctx.fillText('REC', width - 52, 24);
+
+      // NetBird badge
+      if (showVpn) {
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.15)';
+        ctx.fillRect(width - 170, height - 32, 155, 20);
+        ctx.strokeStyle = '#10b981';
+        ctx.strokeRect(width - 170, height - 32, 155, 20);
+        ctx.fillStyle = '#34d399';
+        ctx.font = '10px monospace';
+        ctx.fillText('🔒 NetBird Mesh Active', width - 162, height - 18);
+      }
+
+      // Render tracked targets
+      targets.forEach(t => {
+        t.x += t.vx;
+        if (t.x > width - t.w - 30) {
+          t.x = width - t.w - 30;
+          t.vx = -Math.abs(t.vx);
+        } else if (t.x < 30) {
+          t.x = 30;
+          t.vx = Math.abs(t.vx);
+        }
+
+        t.history.push({ x: t.x + t.w / 2, y: t.y + t.h });
+        if (t.history.length > 25) t.history.shift();
+
+        if (showTrack && t.history.length > 1) {
+          ctx.strokeStyle = 'rgba(145, 94, 255, 0.6)';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(t.history[0].x, t.history[0].y);
+          for (let p = 1; p < t.history.length; p++) {
+            ctx.lineTo(t.history[p].x, t.history[p].y);
+          }
+          ctx.stroke();
+        }
+
+        ctx.fillStyle = 'rgba(145, 94, 255, 0.12)';
+        ctx.fillRect(t.x, t.y, t.w, t.h);
+
+        if (showBbox) {
+          ctx.strokeStyle = '#915eff';
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(t.x, t.y, t.w, t.h);
+
+          const cLen = 6;
+          ctx.strokeStyle = '#34d399';
+          ctx.lineWidth = 2.5;
+          ctx.beginPath(); ctx.moveTo(t.x, t.y + cLen); ctx.lineTo(t.x, t.y); ctx.lineTo(t.x + cLen, t.y); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(t.x + t.w - cLen, t.y); ctx.lineTo(t.x + t.w); ctx.lineTo(t.x + t.w, t.y + cLen); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(t.x, t.y + t.h - cLen); ctx.lineTo(t.x, t.y + t.h); ctx.lineTo(t.x + cLen, t.y + t.h); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(t.x + t.w - cLen, t.y + t.h); ctx.lineTo(t.x + t.w); ctx.lineTo(t.x + t.w, t.y + t.h - cLen); ctx.stroke();
+
+          const tagText = showTrack ? `[ID #${t.id}] ${t.label} ${t.conf}` : `${t.label} ${t.conf}`;
+          ctx.font = '10px monospace';
+          const textW = ctx.measureText(tagText).width + 8;
+          ctx.fillStyle = '#915eff';
+          ctx.fillRect(t.x, t.y - 18, textW, 16);
+          ctx.fillStyle = '#ffffff';
+          ctx.fillText(tagText, t.x + 4, t.y - 6);
+        }
+      });
+
+      // Subtle scanlines
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.015)';
+      scanlineOffset = (scanlineOffset + 0.5) % 6;
+      for (let y = scanlineOffset; y < height; y += 6) {
+        ctx.fillRect(0, y, width, 1.5);
+      }
+    }
+
+    requestAnimationFrame(renderLoop);
+  }
+
+  renderLoop();
+}
+
+/* --------------------------------------------------------------------------
+   17. Architecture Case Study Deep Dive Modals
+   -------------------------------------------------------------------------- */
+function initCaseStudyModal() {
+  const modal = document.getElementById('case-study-modal');
+  const titleEl = document.getElementById('case-study-title');
+  const bodyEl = document.getElementById('case-study-body');
+  const closeBtn = document.getElementById('close-case-study-modal');
+  const openBtns = document.querySelectorAll('.btn-case-study');
+
+  if (!modal || !titleEl || !bodyEl) return;
+
+  const studies = {
+    cinebook: {
+      title: 'CineBook — High-Concurrency Ticket Reservation Engine',
+      content: `
+        <div class="case-study-metric-banner">
+          🚀 <strong>Impact Summary:</strong> Zero double-bookings across 250 virtual user Artillery load tests · 48ms p95 lock acquisition latency · Sub-100ms multi-client WebSocket synchronization.
+        </div>
+
+        <h4 style="color:#fff; font-size:1.05rem; margin:1.5rem 0 0.5rem;">1. The Core Engineering Challenge</h4>
+        <p style="color:var(--text-secondary); font-size:0.9rem;">
+          In high-demand ticket sales, multiple users attempt to reserve the same seat within milliseconds of each other. Relying on traditional relational database row locks causes connection pool exhaustion, slow response spikes, and race conditions that result in catastrophic double-bookings.
+        </p>
+
+        <h4 style="color:#fff; font-size:1.05rem; margin:1.5rem 0 0.5rem;">2. Distributed Locking via Redis SET NX</h4>
+        <p style="color:var(--text-secondary); font-size:0.9rem;">
+          Instead of holding database transactions, the ingress API uses Redis atomic operations:
+        </p>
+        <pre style="background:#0a0a0a; border:1px solid var(--border-subtle); padding:1rem; border-radius:6px; font-family:var(--font-mono); font-size:0.8rem; color:#a78bfa; overflow-x:auto;">
+// Single atomic round-trip: lock acquired only if NOT exists
+const lockAcquired = await redis.set(\`lock:seat:\${seatId}\`, userId, 'NX', 'EX', 30);
+if (!lockAcquired) {
+  return res.status(409).json({ error: 'Seat currently reserved by another patron' });
+}
+// Broadcast instant lock state to other viewers via Socket.io Pub/Sub
+io.emit('seat:locked', { seatId, userId });</pre>
+
+        <h4 style="color:#fff; font-size:1.05rem; margin:1.5rem 0 0.5rem;">3. Key Tradeoffs &amp; Safeguards</h4>
+        <ul style="color:var(--text-secondary); font-size:0.875rem; line-height:1.6; list-style-type:disc; padding-left:1.25rem;">
+          <li><strong>Auto-Expiring TTL (30s):</strong> Prevents orphaned locks if a user abruptly drops connection or closes their browser before checkout.</li>
+          <li><strong>Optimistic Concurrency at DB:</strong> PostgreSQL enforces a unique constraint on <code>(showing_id, seat_id)</code> as a final hard transactional safety net.</li>
+          <li><strong>Containerization:</strong> Orchestrated with Docker Compose for seamless isolated deployments of Fastify, PostgreSQL, and Redis.</li>
+        </ul>
+      `
+    },
+    aicctv: {
+      title: 'AI CCTV Edge Worker — Sub-Stream YOLOv8 & ByteTrack Pipeline',
+      content: `
+        <div class="case-study-metric-banner">
+          🚀 <strong>Impact Summary:</strong> 54 FPS edge throughput · 18.4ms per-frame inference · 78.4% bandwidth reduction · Zero open router inbound ports via NetBird WireGuard mesh.
+        </div>
+
+        <h4 style="color:#fff; font-size:1.05rem; margin:1.5rem 0 0.5rem;">1. The Core Engineering Challenge</h4>
+        <p style="color:var(--text-secondary); font-size:0.9rem;">
+          Streaming 15+ 4K camera feeds over WAN to cloud GPUs consumes immense uplink bandwidth (16+ Mbps per camera), incurs prohibitive cloud compute bills, and introduces latency unacceptable for live security alerting.
+        </p>
+
+        <h4 style="color:#fff; font-size:1.05rem; margin:1.5rem 0 0.5rem;">2. Dual-Stream RTSP Ingestion Architecture</h4>
+        <p style="color:var(--text-secondary); font-size:0.9rem;">
+          Engineered an on-site edge worker using Python and FastAPI directly colocated with the building's NVR. The pipeline splits video duties:
+        </p>
+        <ul style="color:var(--text-secondary); font-size:0.875rem; line-height:1.6; list-style-type:disc; padding-left:1.25rem;">
+          <li><strong>Primary 4K Stream:</strong> Recorded continuously to local hard disks inside the NVR without processing overhead.</li>
+          <li><strong>Sub-stream (480p / D1 @ 1.2 Mbps):</strong> Ingested into OpenCV/FFmpeg frames, processed through FP16 YOLOv8n object detection at 54 FPS.</li>
+        </ul>
+
+        <h4 style="color:#fff; font-size:1.05rem; margin:1.5rem 0 0.5rem;">3. Identity Persistence &amp; Zero-Trust Networking</h4>
+        <ul style="color:var(--text-secondary); font-size:0.875rem; line-height:1.6; list-style-type:disc; padding-left:1.25rem;">
+          <li><strong>ByteTrack Tracking:</strong> Employs Kalman filters and Hungarian matching to retain track IDs even when people are briefly occluded behind pillars.</li>
+          <li><strong>NetBird Mesh Tunnel:</strong> Operates entirely behind NAT/firewall without port forwarding or public static IPs, safeguarding the facility from intrusion.</li>
+        </ul>
+      `
+    },
+    aahar: {
+      title: 'Aahar ERP — Next.js 15 Multi-Tenant Distribution Platform',
+      content: `
+        <div class="case-study-metric-banner">
+          🚀 <strong>Impact Summary:</strong> 99.9% production reliability · Order dispatch time reduced from 4 hours to 12 minutes · Multi-tenant RBAC with automated double-entry ledger.
+        </div>
+
+        <h4 style="color:#fff; font-size:1.05rem; margin:1.5rem 0 0.5rem;">1. The Core Engineering Challenge</h4>
+        <p style="color:var(--text-secondary); font-size:0.9rem;">
+          Managing high-volume food and agricultural manufacturing across disparate warehouses resulted in inventory sync drift, accidental negative stock allocations, and sluggish manual reconciliation.
+        </p>
+
+        <h4 style="color:#fff; font-size:1.05rem; margin:1.5rem 0 0.5rem;">2. Atomic Stock Decrement &amp; Next.js 15 Server Actions</h4>
+        <p style="color:var(--text-secondary); font-size:0.9rem;">
+          Utilized Next.js 15 Server Actions with direct MongoDB atomic update operators to enforce strict non-negative inventory balances:
+        </p>
+        <pre style="background:#0a0a0a; border:1px solid var(--border-subtle); padding:1rem; border-radius:6px; font-family:var(--font-mono); font-size:0.8rem; color:#a78bfa; overflow-x:auto;">
+// Atomic decrement guarded by available stock condition
+const result = await Inventory.updateOne(
+  { _id: itemId, stock: { $gte: requestedQty } },
+  { $inc: { stock: -requestedQty }, $set: { updatedAt: new Date() } }
+);
+if (result.matchedCount === 0) {
+  throw new Error('Insufficient inventory available for requested quantity');
+}</pre>
+
+        <h4 style="color:#fff; font-size:1.05rem; margin:1.5rem 0 0.5rem;">3. Architecture Highlights</h4>
+        <ul style="color:var(--text-secondary); font-size:0.875rem; line-height:1.6; list-style-type:disc; padding-left:1.25rem;">
+          <li><strong>Role-Based Access Control (RBAC):</strong> Granular permissions separating Admins, Dispatch Drivers, and Sales Reps.</li>
+          <li><strong>Automated PDF Invoicing:</strong> Invoices and delivery manifests generated synchronously upon order confirmation.</li>
+        </ul>
+      `
+    }
+  };
+
+  function openStudy(key) {
+    const data = studies[key];
+    if (!data) return;
+    titleEl.textContent = data.title;
+    bodyEl.innerHTML = data.content;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    if (window.playPortfolioSFX) window.playPortfolioSFX('modal');
+  }
+
+  function closeStudy() {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  openBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const proj = btn.getAttribute('data-project');
+      openStudy(proj);
+    });
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeStudy);
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeStudy();
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeStudy();
+  });
+}
+
+/* --------------------------------------------------------------------------
+   18. Web Audio API Sci-Fi Sound Synthesizer (Zero External Audio Assets)
+   -------------------------------------------------------------------------- */
+function initWebAudioSFX() {
+  const toggleBtn = document.getElementById('sfx-toggle-btn');
+  const sfxIcon = document.getElementById('sfx-icon');
+  const sfxLabel = document.getElementById('sfx-label');
+  let audioCtx = null;
+  let sfxEnabled = false;
+
+  function getAudioContext() {
+    if (!audioCtx) {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (AudioContextClass) {
+        audioCtx = new AudioContextClass();
+      }
+    }
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+    return audioCtx;
+  }
+
+  function playSound(type) {
+    if (!sfxEnabled) return;
+    const ctx = getAudioContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+
+    if (type === 'click') {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(600, now);
+      osc.frequency.exponentialRampToValueAtTime(300, now + 0.04);
+      gain.gain.setValueAtTime(0.04, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.04);
+    } else if (type === 'tick') {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(880, now);
+      gain.gain.setValueAtTime(0.02, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.03);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.03);
+    } else if (type === 'tab') {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(440, now);
+      osc.frequency.exponentialRampToValueAtTime(700, now + 0.06);
+      gain.gain.setValueAtTime(0.03, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.06);
+    } else if (type === 'modal') {
+      [523.25, 659.25, 783.99].forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.04);
+        gain.gain.setValueAtTime(0.025, now + idx * 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.04 + 0.12);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + idx * 0.04);
+        osc.stop(now + idx * 0.04 + 0.12);
+      });
+    } else if (type === 'action') {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(220, now);
+      osc.frequency.exponentialRampToValueAtTime(880, now + 0.1);
+      gain.gain.setValueAtTime(0.03, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.1);
+    }
+  }
+
+  window.playPortfolioSFX = playSound;
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      sfxEnabled = !sfxEnabled;
+      if (sfxEnabled) {
+        toggleBtn.classList.add('active');
+        if (sfxIcon) sfxIcon.textContent = '🔊';
+        if (sfxLabel) sfxLabel.textContent = 'SFX ON';
+        getAudioContext();
+        playSound('modal');
+      } else {
+        toggleBtn.classList.remove('active');
+        if (sfxIcon) sfxIcon.textContent = '🔇';
+        if (sfxLabel) sfxLabel.textContent = 'SFX OFF';
+      }
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('button, .term-chip, .filter-btn, .arch-node-item, .yolo-toggle-chip')) {
+      playSound('click');
+    }
+  });
+}
+

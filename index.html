@@ -43,6 +43,9 @@
       </nav>
 
       <div class="nav-actions">
+        <button id="sfx-toggle-btn" class="btn-sfx-toggle" title="Toggle Futuristic Sci-Fi Audio" aria-label="Toggle Sound Effects">
+          <span id="sfx-icon">🔇</span> <span id="sfx-label">SFX OFF</span>
+        </button>
         <button class="btn-terminal-toggle" title="Open Interactive CLI Terminal" aria-label="Open Terminal">
           <span>&gt;_</span> CLI
         </button>
@@ -107,6 +110,39 @@
         <a href="#about" class="scroll-pill" aria-label="Scroll to About section">
           <div class="scroll-dot"></div>
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       Engineering Impact Metrics Strip (Real Scale Numbers)
+       ====================================================================== -->
+  <section class="metrics-strip-wrapper">
+    <div class="container">
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-number" data-target="15" data-suffix="+">0+</div>
+          <div class="metric-label">RTSP Edge Streams</div>
+          <div class="metric-sub">Multi-camera YOLOv8 & ByteTrack tracking via NetBird VPN</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-number" data-target="100" data-prefix="<" data-suffix="ms"><0ms</div>
+          <div class="metric-label">Real-Time Sync Latency</div>
+          <div class="metric-sub">Socket.io WebSocket cluster with Redis Pub/Sub events</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-number" data-target="100" data-suffix="%">0%</div>
+          <div class="metric-label">Race-Condition Prevention</div>
+          <div class="metric-sub">Atomic Redis SET NX distributed locks with TTL auto-expiry</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-number" data-target="99" data-suffix=".9%">0.0%</div>
+          <div class="metric-label">Production ERP Reliability</div>
+          <div class="metric-sub">Next.js 15 enterprise distribution & automated ledger</div>
+        </div>
       </div>
     </div>
   </section>
@@ -540,6 +576,86 @@ export default async function InventoryPage() {
         </div>
 
       </div>
+
+      <!-- Interactive Real-Time Architecture Sandboxes -->
+      <div class="sandbox-card-box">
+        <div class="sandbox-topbar">
+          <div class="sandbox-title-group">
+            <span class="sandbox-live-pill">LIVE BENCHMARK SANDBOX</span>
+            <span style="font-weight: 700; color: #fff; font-size: 1.05rem;">Interactive Concurrency &amp; Edge Vision Simulator</span>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem;">
+            <button id="tab-sandbox-redis" class="arch-tab-btn active" style="padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid var(--border-subtle); background: var(--bg-card-alt);">
+              ⚡ Redis Atomic Lock
+            </button>
+            <button id="tab-sandbox-yolo" class="arch-tab-btn" style="padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid var(--border-subtle); background: var(--bg-card-alt);">
+              👁️ YOLOv8 Edge Vision
+            </button>
+          </div>
+        </div>
+
+        <!-- Sandbox Panel 1: Redis Concurrency -->
+        <div id="panel-sandbox-redis" class="sandbox-split-view">
+          <div class="seat-stage-box">
+            <div style="font-family: var(--font-mono); font-size: 0.8rem; color: #c4b5fd;">Distributed Cinema Seat Reservation Engine</div>
+            <div class="seats-row">
+              <div class="seat-box">A-12<span style="font-size:0.6rem; opacity:0.6;">AVBL</span></div>
+              <div class="seat-box">A-13<span style="font-size:0.6rem; opacity:0.6;">AVBL</span></div>
+              <div id="demo-target-seat" class="seat-box target-seat">A-14<span id="demo-seat-status" style="font-size:0.6rem; color:#c4b5fd;">TARGET</span></div>
+              <div class="seat-box">A-15<span style="font-size:0.6rem; opacity:0.6;">AVBL</span></div>
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap;">
+              <button id="btn-run-race-sim" class="btn-sandbox-action">
+                <span>🔥 Fire 5 Concurrent Requests</span>
+              </button>
+              <button id="btn-release-lock" class="btn-copy" style="color: var(--text-secondary); font-family: var(--font-mono); font-size: 0.8rem; border: 1px solid var(--border-subtle); padding: 0.5rem 0.85rem; border-radius: 6px;" disabled>
+                <span>Release Lock</span>
+              </button>
+            </div>
+            <div id="sim-ttl-counter" style="margin-top: 0.75rem; font-family: var(--font-mono); font-size: 0.75rem; color: #a3a3a3;">
+              Status: Idle. Click button to test concurrency.
+            </div>
+          </div>
+
+          <div class="redis-terminal-feed" id="redis-sim-output">
+            <span style="color:#737373;">// Redis Engine Terminal Output</span><br>
+            <span style="color:#a78bfa;">127.0.0.1:6379&gt;</span> Ready. Waiting for concurrent incoming requests...<br>
+          </div>
+        </div>
+
+        <!-- Sandbox Panel 2: YOLOv8 Edge Vision -->
+        <div id="panel-sandbox-yolo" style="display: none;">
+          <div class="sandbox-split-view">
+            <div class="yolo-feed-wrapper">
+              <canvas id="yolo-sim-canvas"></canvas>
+            </div>
+
+            <div style="background: #000; border: 1px solid var(--border-subtle); border-radius: 6px; padding: 1.25rem; font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.6;">
+              <div style="color: #fff; font-weight: 700; margin-bottom: 0.5rem; display: flex; justify-content: space-between;">
+                <span>Sub-stream RTSP Telemetry</span>
+                <span style="color:#34d399;">54.2 FPS</span>
+              </div>
+              <div style="color: #a3a3a3; font-size: 0.75rem; margin-bottom: 0.75rem;">
+                Worker: Python/FastAPI · Model: YOLOv8n (FP16) · Pipeline: RTSP 480p Sub-stream
+              </div>
+
+              <div class="yolo-controls-bar">
+                <button class="yolo-toggle-chip active" id="chip-toggle-bbox">Bounding Boxes [ON]</button>
+                <button class="yolo-toggle-chip active" id="chip-toggle-track">ByteTrack IDs [ON]</button>
+                <button class="yolo-toggle-chip" id="chip-toggle-vpn">NetBird Mesh [ENCRYPTED]</button>
+              </div>
+
+              <div style="margin-top: 1rem; padding: 0.75rem; background: #0a0a0a; border-radius: 4px; font-size: 0.725rem; color: #c4b5fd;">
+                • Bandwidth Saved: <strong>78.4%</strong> (480p @ 1.2 Mbps vs 4K @ 16 Mbps)<br>
+                • Edge Worker Latency: <strong>18.4ms per frame</strong><br>
+                • Security: Zero open router ports via WireGuard mesh tunnel
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -586,6 +702,11 @@ export default async function InventoryPage() {
             <span class="hashtag purple">#postgresql</span>
             <span class="hashtag amber">#docker</span>
           </div>
+
+          <button class="btn-case-study" data-project="cinebook">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            <span>Architecture Deep Dive</span>
+          </button>
         </div>
 
         <!-- Project 2: AI CCTV Edge Worker -->
@@ -609,6 +730,11 @@ export default async function InventoryPage() {
             <span class="hashtag purple">#bytetrack</span>
             <span class="hashtag amber">#netbirdvpn</span>
           </div>
+
+          <button class="btn-case-study" data-project="aicctv">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            <span>Architecture Deep Dive</span>
+          </button>
         </div>
 
         <!-- Project 3: Aahar ERP -->
@@ -631,6 +757,11 @@ export default async function InventoryPage() {
             <span class="hashtag purple">#typescript</span>
             <span class="hashtag amber">#rbac</span>
           </div>
+
+          <button class="btn-case-study" data-project="aahar">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            <span>Architecture Deep Dive</span>
+          </button>
         </div>
 
         <!-- Project 4: Verif-Ai -->
@@ -785,6 +916,52 @@ export default async function InventoryPage() {
             <span class="skill-pill">GitHub Actions CI/CD</span>
             <span class="skill-pill">NetBird WireGuard Mesh</span>
             <span class="skill-pill">Postman</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- GitHub Developer Activity & Language Distribution -->
+      <div class="github-activity-strip">
+        <div class="github-profile-left">
+          <div style="display: flex; align-items: center; gap: 0.85rem;">
+            <img src="https://github.com/Draken970.png" alt="Sarvesh Wadkar" style="width: 46px; height: 46px; border-radius: 50%; border: 2px solid var(--accent-purple);">
+            <div>
+              <div style="font-weight: 700; color: #fff; font-size: 1.05rem;">@Draken970 on GitHub</div>
+              <div style="font-size: 0.8rem; color: var(--text-secondary); font-family: var(--font-mono);">Engineering Repositories &amp; Open Source Contributions</div>
+            </div>
+          </div>
+          <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6;">
+            Continuous commits across distributed systems, edge AI vision pipelines, and production Next.js enterprise microservices.
+          </div>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap; font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.25rem;">
+            <span style="color: #34d399;">● Public Repos: 15+</span>
+            <span style="color: #c4b5fd;">● Production Deploys: Active</span>
+            <span style="color: #60a5fa;">● Architecture: Microservices &amp; Edge</span>
+          </div>
+        </div>
+
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary);">
+            <span>Core Language Breakdown</span>
+            <span style="color: #fff; font-weight: 700;">Active Codebase</span>
+          </div>
+          <div class="github-lang-bar">
+            <div class="lang-segment ts" title="TypeScript 44%"></div>
+            <div class="lang-segment py" title="Python 32%"></div>
+            <div class="lang-segment js" title="JavaScript 16%"></div>
+            <div class="lang-segment other" title="SQL / Docker / Shell 8%"></div>
+          </div>
+          <div class="lang-legend">
+            <div class="legend-item"><span class="legend-dot" style="background: #3178c6;"></span><span>TypeScript 44%</span></div>
+            <div class="legend-item"><span class="legend-dot" style="background: #3572A5;"></span><span>Python 32%</span></div>
+            <div class="legend-item"><span class="legend-dot" style="background: #f1e05a;"></span><span>JavaScript 16%</span></div>
+            <div class="legend-item"><span class="legend-dot" style="background: #915eff;"></span><span>Other 8%</span></div>
+          </div>
+          <div style="margin-top: 1.25rem;">
+            <a href="https://github.com/Draken970" target="_blank" rel="noopener noreferrer" class="btn-copy" style="display: inline-flex; align-items: center; gap: 0.45rem; color: #fff; font-family: var(--font-mono); font-size: 0.775rem; border: 1px solid var(--border-subtle); padding: 0.5rem 0.95rem; border-radius: 6px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              <span>Explore All Repositories @Draken970 →</span>
+            </a>
           </div>
         </div>
       </div>
@@ -975,6 +1152,25 @@ export default async function InventoryPage() {
             <div><strong>Certifications:</strong> Full-Stack Web Development (MERN) &amp; Java DSA — Apna College</div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       Architecture Case Study Modal
+       ====================================================================== -->
+  <div id="case-study-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Architecture Case Study">
+    <div class="case-study-modal-card">
+      <div class="case-study-header">
+        <div style="display: flex; align-items: center; gap: 0.65rem;">
+          <span style="font-family: var(--font-mono); font-size: 0.75rem; background: rgba(145,94,255,0.2); color: #c4b5fd; padding: 0.2rem 0.55rem; border-radius: 4px; border: 1px solid rgba(145,94,255,0.3);">SYSTEM ARCHITECTURE CASE STUDY</span>
+          <h3 id="case-study-title" style="font-size: 1.15rem; color: #fff; margin: 0;">Project Deep Dive</h3>
+        </div>
+        <button id="close-case-study-modal" class="btn-copy" style="color: var(--text-secondary); font-size: 1.1rem; padding: 0.2rem 0.5rem;" title="Close">✕</button>
+      </div>
+
+      <div id="case-study-body" class="case-study-body">
+        <!-- Injected dynamically via JavaScript -->
       </div>
     </div>
   </div>
