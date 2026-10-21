@@ -1,0 +1,19 @@
+{
+  "name": "sarvesh-portfolio",
+  "version": "1.0.0",
+  "description": "3D Personal Developer Portfolio for Sarvesh Wadkar",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx -y serve . -l 4200",
+    "start": "npx -y serve . -l 4200",
+    "serve": "python -m http.server 4200"
+  },
+  "keywords": [
+    "portfolio",
+    "developer",
+    "threejs",
+    "stealth-black"
+  ],
+  "author": "Sarvesh Wadkar",
+  "license": "MIT"
+}

@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO & Social Meta -->
+  <title>Sarvesh Wadkar | 3D Portfolio — AI Full-Stack Engineer</title>
+  <meta name="description" content="Portfolio of Sarvesh Wadkar — AI Full-Stack Engineer specializing in Next.js 15, Redis atomic locks, real-time WebSockets, and edge computer vision with YOLOv8 & FastAPI.">
+  <meta name="keywords" content="Sarvesh Wadkar, 3D Portfolio, AI Full-Stack Engineer, Next.js 15, YOLOv8, FastAPI, Redis, Socket.io, Computer Vision, SFIT Mumbai">
+  <meta name="author" content="Sarvesh Wadkar">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Fullscreen 3D Background Starfield Canvas -->
+  <canvas id="stars-canvas"></canvas>
+
+  <!-- ======================================================================
+       Header & Navigation
+       ====================================================================== -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="#hero" class="nav-brand" aria-label="Sarvesh Wadkar Home">
+        <div class="brand-icon-box">S</div>
+        <div class="brand-text">Sarvesh <span>| Portfolio</span></div>
+      </a>
+
+      <nav class="nav-links" aria-label="Main Navigation">
+        <a href="#about" class="nav-link">About</a>
+        <a href="#experience" class="nav-link">Work</a>
+        <a href="#architecture" class="nav-link">Architecture</a>
+        <a href="#projects" class="nav-link">Projects</a>
+        <a href="#skills" class="nav-link">Skills</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn-terminal-toggle" title="Open Interactive CLI Terminal" aria-label="Open Terminal">
+          <span>&gt;_</span> CLI
+        </button>
+        <a href="https://drive.google.com/file/d/1KOlCKIPTA4m3qXLN1r_ubqgrEQaBaO2d/view?usp=drivesdk" target="_blank" rel="noopener noreferrer" class="btn-resume" title="View Resume (Google Drive)" aria-label="View Resume">
+          <span>Resume</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+        </a>
+        <button class="mobile-menu-toggle" aria-label="Toggle Navigation Menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================================
+       Hero Section (Signature Violet Dot + Line + 3D Interactive Canvas)
+       ====================================================================== -->
+  <section id="hero" class="hero-section">
+    <div class="container">
+      <div class="hero-main-layout">
+        
+        <!-- Violet Dot & Vertical Line Indicator -->
+        <div class="hero-indicator-column">
+          <div class="hero-indicator-dot"></div>
+          <div class="hero-indicator-line"></div>
+        </div>
+
+        <!-- Hero Text -->
+        <div class="hero-text-content">
+          <h1 class="hero-title">
+            Hi, I'm <span class="name-highlight">Sarvesh</span>
+          </h1>
+          <p class="hero-subtitle">
+            I engineer <strong>high-concurrency real-time systems</strong>, production <strong>Next.js 15 enterprise platforms</strong>, and edge <strong>computer vision AI pipelines</strong>.
+          </p>
+
+          <div class="hero-cta-buttons">
+            <a href="#projects" class="btn-hero-primary">
+              <span>View Projects</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+            <a href="https://drive.google.com/file/d/1KOlCKIPTA4m3qXLN1r_ubqgrEQaBaO2d/view?usp=drivesdk" target="_blank" rel="noopener noreferrer" class="btn-hero-secondary" style="border-color: var(--accent-purple);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              <span>Resume (Drive)</span>
+            </a>
+            <a href="#experience" class="btn-hero-secondary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+              <span>Work Experience</span>
+            </a>
+            <a href="https://github.com/Draken970" target="_blank" rel="noopener noreferrer" class="btn-hero-secondary" style="border-color: rgba(255,255,255,0.15);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              <span>GitHub</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 3D Interactive Cyber Core Stage -->
+      <div class="hero-3d-stage">
+        <canvas id="hero-3d-canvas"></canvas>
+      </div>
+
+      <!-- Mouse Scroll Indicator Pill -->
+      <div class="hero-scroll-indicator">
+        <a href="#about" class="scroll-pill" aria-label="Scroll to About section">
+          <div class="scroll-dot"></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       About / Overview Section (3D Tilt Cards)
+       ====================================================================== -->
+  <section id="about" class="section-wrapper">
+    <div class="container">
+      <p class="section-subtext">Introduction</p>
+      <h2 class="section-headtext">Overview<span class="purple-dot">.</span></h2>
+      
+      <p class="section-desc">
+        I am a <strong>recent graduate (2026)</strong> from St. Francis Institute of Technology (SFIT), Mumbai, and currently an <strong>on-site Full Stack Developer Intern at AutoWhat</strong>. I specialize in building production systems with <strong>Next.js 15, TypeScript, Node.js and MongoDB</strong>, while deploying high-throughput AI services into real-world applications — from <strong>YOLOv8 edge tracking</strong> across 15+ RTSP cameras to <strong>Redis atomic locking</strong> eliminating race conditions across concurrent users.
+      </p>
+
+      <!-- 4 3D Tilt Cards -->
+      <div class="overview-grid">
+        
+        <!-- Card 1 -->
+        <div class="overview-card-wrapper">
+          <div class="overview-card-inner">
+            <div class="overview-card-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            </div>
+            <h3 class="overview-card-title">AI Full-Stack Developer</h3>
+            <p class="overview-card-desc">Next.js 15, TypeScript, MongoDB, and FastAPI microservices for enterprise workflows.</p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="overview-card-wrapper">
+          <div class="overview-card-inner">
+            <div class="overview-card-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            </div>
+            <h3 class="overview-card-title">Real-Time Systems Specialist</h3>
+            <p class="overview-card-desc">Redis SET NX atomic locking, TTL auto-expiry, and sub-100ms Socket.io WebSocket broadcasts.</p>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="overview-card-wrapper">
+          <div class="overview-card-inner">
+            <div class="overview-card-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="12 8 8 12 12 16 16 12 12 8"></polygon></svg>
+            </div>
+            <h3 class="overview-card-title">Computer Vision &amp; Edge AI</h3>
+            <p class="overview-card-desc">YOLOv8, ByteTrack, RTSP sub-stream NVR processing, and secure NetBird WireGuard mesh tunnels.</p>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="overview-card-wrapper">
+          <div class="overview-card-inner">
+            <div class="overview-card-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+            </div>
+            <h3 class="overview-card-title">Backend &amp; Distributed Systems</h3>
+            <p class="overview-card-desc">PostgreSQL, ACID transactions, Docker Compose containerization, and zero-downtime CI/CD.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       Work Experience Section (Exact Alternating Central Timeline from Video)
+       ====================================================================== -->
+  <section id="experience" class="section-wrapper">
+    <div class="container">
+      <p class="section-subtext">What I have done so far</p>
+      <h2 class="section-headtext">Work Experience<span class="purple-dot">.</span></h2>
+
+      <div class="experience-timeline-section">
+        <div class="vertical-timeline">
+          
+          <!-- Entry 1: AutoWhat Internship (Left) -->
+          <div class="timeline-entry left">
+            <!-- Glowing Center Icon Node -->
+            <div class="timeline-node-icon green" title="AutoWhat Internship">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+            </div>
+
+            <!-- Content Card -->
+            <div class="timeline-content-card">
+              <span class="timeline-date-tag">1st Sep 2026 – Present · On-Site</span>
+              <h3 class="timeline-job-title">Full Stack Developer Intern</h3>
+              <div class="timeline-company-name"><strong>AutoWhat</strong> · Mumbai (On-Site)</div>
+
+              <div class="timeline-bullet-list">
+                <div class="timeline-bullet-item">
+                  <strong>Aahar ERP Platform:</strong> Building an enterprise manufacturing &amp; distribution ERP using <strong>Next.js 15</strong> and <strong>MongoDB</strong> with granular role-based access control (RBAC), multi-warehouse stock management, and automated invoicing &amp; payment flows.
+                </div>
+                <div class="timeline-bullet-item">
+                  <strong>AI CCTV Detection System:</strong> Developed a Python/FastAPI worker that reads real-time RTSP streams from the building's NVR, detects humans with <strong>YOLOv8</strong>, and tracks them with <strong>ByteTrack</strong>, engineered to scale across 15+ concurrent cameras.
+                </div>
+                <div class="timeline-bullet-item">
+                  <strong>Edge Architecture:</strong> Deployed inference next to the NVR on low-resolution sub-streams, with secure remote telemetry over a private <strong>NetBird WireGuard VPN</strong> instead of exposing internal camera ports to the open internet.
+                </div>
+              </div>
+
+              <div class="timeline-tech-chips">
+                <span class="timeline-chip">Next.js 15</span>
+                <span class="timeline-chip">TypeScript</span>
+                <span class="timeline-chip">MongoDB</span>
+                <span class="timeline-chip">Python</span>
+                <span class="timeline-chip">FastAPI</span>
+                <span class="timeline-chip">YOLOv8</span>
+                <span class="timeline-chip">ByteTrack</span>
+                <span class="timeline-chip">NetBird VPN</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Entry 2: SFIT Engineering Degree (Right) -->
+          <div class="timeline-entry right">
+            <!-- Glowing Center Icon Node -->
+            <div class="timeline-node-icon cyan" title="SFIT Mumbai">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"></path></svg>
+            </div>
+
+            <!-- Content Card -->
+            <div class="timeline-content-card">
+              <span class="timeline-date-tag">Class of 2026</span>
+              <h3 class="timeline-job-title">Recent Graduate</h3>
+              <div class="timeline-company-name"><strong>St. Francis Institute of Technology (SFIT)</strong> · Mumbai, India</div>
+
+              <div class="timeline-bullet-list">
+                <div class="timeline-bullet-item">
+                  Mastered core computer science and engineering coursework: <strong>Data Structures &amp; Algorithms</strong>, Computer Networks, Database Management Systems, Signal &amp; Image Processing, and Embedded Operating Systems.
+                </div>
+                <div class="timeline-bullet-item">
+                  Designed real-time distributed software architectures and microservice concurrency pipelines applied to production engineering problems.
+                </div>
+              </div>
+
+              <div class="timeline-tech-chips">
+                <span class="timeline-chip">DSA</span>
+                <span class="timeline-chip">Networking</span>
+                <span class="timeline-chip">DBMS</span>
+                <span class="timeline-chip">Signal Processing</span>
+                <span class="timeline-chip">Java</span>
+                <span class="timeline-chip">C++</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Entry 3: Certifications & Foundations (Left) -->
+          <div class="timeline-entry left">
+            <!-- Glowing Center Icon Node -->
+            <div class="timeline-node-icon" title="Certifications">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+            </div>
+
+            <!-- Content Card -->
+            <div class="timeline-content-card">
+              <span class="timeline-date-tag">2020 – 2024</span>
+              <h3 class="timeline-job-title">Engineering Certifications &amp; Academics</h3>
+              <div class="timeline-company-name"><strong>Apna College &amp; Board Examinations</strong></div>
+
+              <div class="timeline-bullet-list">
+                <div class="timeline-bullet-item">
+                  <strong>Full-Stack Web Development (MERN):</strong> Certified in React.js, Node.js, Express, and MongoDB platform development.
+                </div>
+                <div class="timeline-bullet-item">
+                  <strong>Java with Data Structures &amp; Algorithms:</strong> Intensive training in algorithmic complexity, graph traversal, and tree data structures.
+                </div>
+                <div class="timeline-bullet-item">
+                  <strong>Higher Secondary Certificate (HSC - 2022):</strong> Nirmala Memorial Foundation.
+                </div>
+                <div class="timeline-bullet-item">
+                  <strong>Secondary School Certificate (SSC - 2020):</strong> Parmanand Jethanand Pancholia High School.
+                </div>
+              </div>
+
+              <div class="timeline-tech-chips">
+                <span class="timeline-chip">MERN Stack</span>
+                <span class="timeline-chip">Java DSA</span>
+                <span class="timeline-chip">HSC 2022</span>
+                <span class="timeline-chip">SSC 2020</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       Interactive System Architecture Explorer
+       ====================================================================== -->
+  <section id="architecture" class="section-wrapper">
+    <div class="container">
+      <p class="section-subtext">System Architecture</p>
+      <h2 class="section-headtext">Data Flow Inspector<span class="purple-dot">.</span></h2>
+      <p class="section-desc">
+        Click any component node below to inspect real-time distributed flows, concurrency guarantees, and production architectural trade-offs.
+      </p>
+
+      <div class="arch-card-wrapper">
+        <div class="arch-tabs-nav" role="tablist">
+          <button class="arch-tab-btn active" data-arch="cinebook" role="tab">01. CineBook Concurrency Engine</button>
+          <button class="arch-tab-btn" data-arch="cctv" role="tab">02. AI CCTV Edge Pipeline</button>
+          <button class="arch-tab-btn" data-arch="aahar" role="tab">03. Aahar ERP Platform</button>
+        </div>
+
+        <!-- CineBook Panel -->
+        <div id="arch-cinebook" class="arch-tab-content active" role="tabpanel">
+          <div style="margin-bottom: 1rem;">
+            <h3 style="color: var(--text-white); font-size: 1.3rem;">Distributed Seat Reservation &amp; Atomic Locking</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Eliminating race conditions across 100+ concurrent clients with sub-100ms sync.</p>
+          </div>
+
+          <div class="arch-pipeline-visual">
+            <div class="arch-node selected" data-arch-key="cinebook" data-node-key="client">
+              <div class="arch-node-badge">Step 1</div>
+              <div class="arch-node-name">Client UI / App</div>
+              <div class="arch-node-metric">Seat Select Click</div>
+            </div>
+
+            <div class="arch-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+
+            <div class="arch-node" data-arch-key="cinebook" data-node-key="gateway">
+              <div class="arch-node-badge">Step 2</div>
+              <div class="arch-node-name">Express API Gateway</div>
+              <div class="arch-node-metric">Auth &amp; Rate Limit</div>
+            </div>
+
+            <div class="arch-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+
+            <div class="arch-node" data-arch-key="cinebook" data-node-key="redis">
+              <div class="arch-node-badge">Core Lock</div>
+              <div class="arch-node-name">Redis Atomic Lock</div>
+              <div class="arch-node-metric">100% Collision-Free</div>
+            </div>
+
+            <div class="arch-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+
+            <div class="arch-node" data-arch-key="cinebook" data-node-key="postgres">
+              <div class="arch-node-badge">Storage</div>
+              <div class="arch-node-name">PostgreSQL ACID</div>
+              <div class="arch-node-metric">Bookings Table</div>
+            </div>
+
+            <div class="arch-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+
+            <div class="arch-node" data-arch-key="cinebook" data-node-key="websocket">
+              <div class="arch-node-badge">Broadcast</div>
+              <div class="arch-node-name">Socket.io WS</div>
+              <div class="arch-node-metric">&lt; 100ms All Clients</div>
+            </div>
+          </div>
+
+          <div class="arch-inspector-box">
+            <div class="inspector-header">
+              <div class="inspector-title">
+                <span class="inspector-node-title">Client Request &amp; WebSocket</span>
+              </div>
+              <span class="inspector-tag">Incoming Traffic</span>
+            </div>
+            <div class="inspector-body">
+              <div class="inspector-desc">
+                Concurrent seat selection triggers a dual pathway: HTTP POST for immediate reservation attempt and persistent WebSocket connection via Socket.io for seat lock events.
+              </div>
+              <pre class="inspector-code">// Client WebSocket seat listener
+socket.on("seat:locked", ({ seatId, userId, ttl }) => {
+  renderSeatState(seatId, "LOCKED", ttl);
+});</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI CCTV Panel -->
+        <div id="arch-cctv" class="arch-tab-content" role="tabpanel">
+          <div style="margin-bottom: 1rem;">
+            <h3 style="color: var(--text-white); font-size: 1.3rem;">On-Premise RTSP Sub-stream Edge Inference</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Scalable people detection and tracking across 15+ camera feeds with zero exposed network ports.</p>
+          </div>
+
+          <div class="arch-pipeline-visual">
+            <div class="arch-node selected" data-arch-key="cctv" data-node-key="rtsp">
+              <div class="arch-node-badge">Ingestion</div>
+              <div class="arch-node-name">NVR (15+ Feeds)</div>
+              <div class="arch-node-metric">Low-Res Substream</div>
+            </div>
+
+            <div class="arch-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+
+            <div class="arch-node" data-arch-key="cctv" data-node-key="fastapi">
+              <div class="arch-node-badge">Worker</div>
+              <div class="arch-node-name">FastAPI Edge Node</div>
+              <div class="arch-node-metric">Async Capture Loop</div>
+            </div>
+
+            <div class="arch-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+
+            <div class="arch-node" data-arch-key="cctv" data-node-key="yolo">
+              <div class="arch-node-badge">Inference</div>
+              <div class="arch-node-name">YOLOv8 Detection</div>
+              <div class="arch-node-metric">Conf &gt; 0.45</div>
+            </div>
+
+            <div class="arch-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+
+            <div class="arch-node" data-arch-key="cctv" data-node-key="bytetrack">
+              <div class="arch-node-badge">Tracking</div>
+              <div class="arch-node-name">ByteTrack Assoc.</div>
+              <div class="arch-node-metric">Trajectory IDs</div>
+            </div>
+
+            <div class="arch-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+
+            <div class="arch-node" data-arch-key="cctv" data-node-key="netbird">
+              <div class="arch-node-badge">Tunnel</div>
+              <div class="arch-node-name">NetBird VPN Mesh</div>
+              <div class="arch-node-metric">0 Exposed Ports</div>
+            </div>
+          </div>
+
+          <div class="arch-inspector-box">
+            <div class="inspector-header">
+              <div class="inspector-title">
+                <span class="inspector-node-title">Building NVR (15+ Cameras)</span>
+              </div>
+              <span class="inspector-tag">Video Ingestion</span>
+            </div>
+            <div class="inspector-body">
+              <div class="inspector-desc">
+                Building Network Video Recorder feeds multiple H.264/H.265 RTSP streams. To prevent bandwidth saturation, inference worker requests the secondary low-resolution sub-stream (480p) instead of 4K main streams.
+              </div>
+              <pre class="inspector-code">// RTSP Sub-stream URI configuration
+rtsp://admin:pass@192.168.1.120:554/Streaming/Channels/102
+// Channels/102 is the low-bitrate sub-stream for computer vision</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aahar ERP Panel -->
+        <div id="arch-aahar" class="arch-tab-content" role="tabpanel">
+          <div style="margin-bottom: 1rem;">
+            <h3 style="color: var(--text-white); font-size: 1.3rem;">Enterprise Manufacturing ERP Architecture</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Next.js 15 App Router, automated inventory state machines, role security, and invoicing pipeline.</p>
+          </div>
+
+          <div class="arch-pipeline-visual">
+            <div class="arch-node selected" data-arch-key="aahar" data-node-key="nextjs">
+              <div class="arch-node-badge">Client &amp; SSR</div>
+              <div class="arch-node-name">Next.js 15 App</div>
+              <div class="arch-node-metric">Server Components</div>
+            </div>
+
+            <div class="arch-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+
+            <div class="arch-node" data-arch-key="aahar" data-node-key="rbac">
+              <div class="arch-node-badge">Security</div>
+              <div class="arch-node-name">RBAC Middleware</div>
+              <div class="arch-node-metric">Role Permissions</div>
+            </div>
+
+            <div class="arch-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+
+            <div class="arch-node" data-arch-key="aahar" data-node-key="inventory">
+              <div class="arch-node-badge">Core Engine</div>
+              <div class="arch-node-name">Inventory Ledger</div>
+              <div class="arch-node-metric">Audit Log State</div>
+            </div>
+
+            <div class="arch-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+
+            <div class="arch-node" data-arch-key="aahar" data-node-key="invoicing">
+              <div class="arch-node-badge">Billing</div>
+              <div class="arch-node-name">Invoice Pipeline</div>
+              <div class="arch-node-metric">Payment Hooks</div>
+            </div>
+
+            <div class="arch-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+
+            <div class="arch-node" data-arch-key="aahar" data-node-key="mongodb">
+              <div class="arch-node-badge">Database</div>
+              <div class="arch-node-name">MongoDB Cluster</div>
+              <div class="arch-node-metric">Compound Indexes</div>
+            </div>
+          </div>
+
+          <div class="arch-inspector-box">
+            <div class="inspector-header">
+              <div class="inspector-title">
+                <span class="inspector-node-title">Next.js 15 Client &amp; App Router</span>
+              </div>
+              <span class="inspector-tag">React Server Components</span>
+            </div>
+            <div class="inspector-body">
+              <div class="inspector-desc">
+                Server-rendered pages for ultra-fast initial loads paired with interactive React client components for dynamic order tables, real-time inventory adjustments, and responsive dashboard charts.
+              </div>
+              <pre class="inspector-code">// app/inventory/page.tsx
+export default async function InventoryPage() {
+  const session = await getServerSession(authOptions);
+  const stockData = await getInventoryStock(session.orgId);
+  return &lt;InventoryClientView initialData={stockData} /&gt;;
+}</pre>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       Featured Projects Section (3D Tilt Cards with Floating GitHub Badge)
+       ====================================================================== -->
+  <section id="projects" class="section-wrapper">
+    <div class="container">
+      <p class="section-subtext">My Work</p>
+      <h2 class="section-headtext">Projects<span class="purple-dot">.</span></h2>
+      <p class="section-desc">
+        Following projects showcase my skills and experience through real-world examples of my work. Each project is briefly described with links to code repositories and live architecture flows.
+      </p>
+
+      <!-- Filter Controls -->
+      <div class="projects-filter-bar">
+        <button class="filter-btn active" data-filter="all">All Projects</button>
+        <button class="filter-btn" data-filter="realtime">Real-Time &amp; Backend</button>
+        <button class="filter-btn" data-filter="ai-cv">AI &amp; Computer Vision</button>
+        <button class="filter-btn" data-filter="erp">Full-Stack ERP</button>
+      </div>
+
+      <!-- Projects Grid -->
+      <div class="projects-grid">
+        
+        <!-- Project 1: CineBook -->
+        <div class="project-3d-card" data-category="realtime">
+          <div class="project-img-wrapper">
+            <img src="assets/images/cinebook.jpg" alt="CineBook Project">
+            <a href="https://github.com/Draken970" target="_blank" rel="noopener noreferrer" class="project-github-badge" title="View Source on GitHub">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+          </div>
+
+          <h3 class="project-title">CineBook</h3>
+          <p class="project-description">
+            High-concurrency ticket reservation engine. Architected Redis SET NX atomic locking to eliminate double-booking across 100+ concurrent users with TTL auto-expiry and sub-100ms WebSocket synchronization.
+          </p>
+
+          <div class="project-hashtags">
+            <span class="hashtag blue">#nodejs</span>
+            <span class="hashtag green">#redis</span>
+            <span class="hashtag pink">#socketio</span>
+            <span class="hashtag purple">#postgresql</span>
+            <span class="hashtag amber">#docker</span>
+          </div>
+        </div>
+
+        <!-- Project 2: AI CCTV Edge Worker -->
+        <div class="project-3d-card" data-category="ai-cv">
+          <div class="project-img-wrapper">
+            <img src="assets/images/cctv_ai.jpg" alt="AI CCTV Worker Project">
+            <a href="https://github.com/Draken970" target="_blank" rel="noopener noreferrer" class="project-github-badge" title="View Source on GitHub">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+          </div>
+
+          <h3 class="project-title">AI CCTV Edge Worker</h3>
+          <p class="project-description">
+            Production computer vision pipeline reading RTSP feeds directly from building NVR, detecting humans with YOLOv8 and tracking with ByteTrack across 15+ camera streams via private NetBird VPN mesh.
+          </p>
+
+          <div class="project-hashtags">
+            <span class="hashtag green">#python</span>
+            <span class="hashtag blue">#fastapi</span>
+            <span class="hashtag pink">#yolov8</span>
+            <span class="hashtag purple">#bytetrack</span>
+            <span class="hashtag amber">#netbirdvpn</span>
+          </div>
+        </div>
+
+        <!-- Project 3: Aahar ERP -->
+        <div class="project-3d-card" data-category="erp">
+          <div class="project-img-wrapper">
+            <img src="assets/images/aahar_erp.jpg" alt="Aahar ERP Project">
+            <a href="https://github.com/Draken970" target="_blank" rel="noopener noreferrer" class="project-github-badge" title="View Source on GitHub">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+          </div>
+
+          <h3 class="project-title">Aahar ERP</h3>
+          <p class="project-description">
+            Enterprise manufacturing &amp; distribution platform engineered with Next.js 15, handling multi-tenant RBAC permissions, multi-warehouse stock management, automated invoicing, and payments.
+          </p>
+
+          <div class="project-hashtags">
+            <span class="hashtag blue">#nextjs15</span>
+            <span class="hashtag green">#mongodb</span>
+            <span class="hashtag purple">#typescript</span>
+            <span class="hashtag amber">#rbac</span>
+          </div>
+        </div>
+
+        <!-- Project 4: Verif-Ai -->
+        <div class="project-3d-card" data-category="ai-cv">
+          <div class="project-img-wrapper" style="background: linear-gradient(135deg, #181818, #050505); display: flex; align-items: center; justify-content: center;">
+            <div style="font-family: var(--font-mono); font-size: 1.8rem; color: #a78bfa; font-weight: 700;">Verif-Ai</div>
+            <a href="https://github.com/Draken970" target="_blank" rel="noopener noreferrer" class="project-github-badge" title="View Source on GitHub">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+          </div>
+
+          <h3 class="project-title">Verif-Ai</h3>
+          <p class="project-description">
+            LLM hallucination detector that cross-examines AI generated answers against ground-truth source documents using HuggingFace cross-encoder natural language inference (NLI) models.
+          </p>
+
+          <div class="project-hashtags">
+            <span class="hashtag green">#python</span>
+            <span class="hashtag purple">#huggingface</span>
+            <span class="hashtag blue">#cross-encoder</span>
+            <span class="hashtag pink">#streamlit</span>
+          </div>
+        </div>
+
+        <!-- Project 5: WanderLust -->
+        <div class="project-3d-card" data-category="realtime erp">
+          <div class="project-img-wrapper" style="background: linear-gradient(135deg, #181818, #050505); display: flex; align-items: center; justify-content: center;">
+            <div style="font-family: var(--font-mono); font-size: 1.8rem; color: #34d399; font-weight: 700;">WanderLust</div>
+            <a href="https://github.com/Draken970" target="_blank" rel="noopener noreferrer" class="project-github-badge" title="View Source on GitHub">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+          </div>
+
+          <h3 class="project-title">WanderLust</h3>
+          <p class="project-description">
+            Full-stack MVC property rental platform with RESTful APIs, full CRUD for listings &amp; reviews, API validation tests, and automated GitHub CI zero-downtime releases on Render.
+          </p>
+
+          <div class="project-hashtags">
+            <span class="hashtag green">#nodejs</span>
+            <span class="hashtag blue">#express</span>
+            <span class="hashtag pink">#mongodb</span>
+            <span class="hashtag amber">#github-ci</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       Technical Skills Matrix Section
+       ====================================================================== -->
+  <section id="skills" class="section-wrapper">
+    <div class="container">
+      <p class="section-subtext">Technical Expertise</p>
+      <h2 class="section-headtext">Skills &amp; Tooling<span class="purple-dot">.</span></h2>
+
+      <div class="skills-grid">
+        <div class="skill-category-card">
+          <div class="skill-cat-header">
+            <div class="skill-cat-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            </div>
+            <h3 class="skill-cat-title">Languages</h3>
+          </div>
+          <div class="skill-chips-list">
+            <span class="skill-pill featured">TypeScript</span>
+            <span class="skill-pill featured">JavaScript</span>
+            <span class="skill-pill featured">Python 3</span>
+            <span class="skill-pill">Java</span>
+            <span class="skill-pill">SQL</span>
+            <span class="skill-pill">HTML5 &amp; CSS3</span>
+          </div>
+        </div>
+
+        <div class="skill-category-card">
+          <div class="skill-cat-header">
+            <div class="skill-cat-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            </div>
+            <h3 class="skill-cat-title">Frontend Frameworks</h3>
+          </div>
+          <div class="skill-chips-list">
+            <span class="skill-pill featured">Next.js 15 (App Router)</span>
+            <span class="skill-pill featured">React.js</span>
+            <span class="skill-pill">Three.js 3D</span>
+            <span class="skill-pill">Streamlit</span>
+            <span class="skill-pill">Server Actions</span>
+            <span class="skill-pill">Responsive Design</span>
+          </div>
+        </div>
+
+        <div class="skill-category-card">
+          <div class="skill-cat-header">
+            <div class="skill-cat-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+            </div>
+            <h3 class="skill-cat-title">Backend &amp; Real-Time</h3>
+          </div>
+          <div class="skill-chips-list">
+            <span class="skill-pill featured">Node.js</span>
+            <span class="skill-pill featured">Express.js</span>
+            <span class="skill-pill featured">Socket.io (WebSockets)</span>
+            <span class="skill-pill featured">FastAPI (Python)</span>
+            <span class="skill-pill">RESTful APIs</span>
+          </div>
+        </div>
+
+        <div class="skill-category-card">
+          <div class="skill-cat-header">
+            <div class="skill-cat-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+            </div>
+            <h3 class="skill-cat-title">Databases &amp; Caching</h3>
+          </div>
+          <div class="skill-chips-list">
+            <span class="skill-pill featured">MongoDB (Mongoose)</span>
+            <span class="skill-pill featured">Redis (Atomic Locks &amp; TTL)</span>
+            <span class="skill-pill">PostgreSQL</span>
+            <span class="skill-pill">MySQL</span>
+            <span class="skill-pill">Compound Indexing</span>
+          </div>
+        </div>
+
+        <div class="skill-category-card">
+          <div class="skill-cat-header">
+            <div class="skill-cat-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 2a10 10 0 0 1 10 10h-10V2z"></path></svg>
+            </div>
+            <h3 class="skill-cat-title">AI &amp; Computer Vision</h3>
+          </div>
+          <div class="skill-chips-list">
+            <span class="skill-pill featured">YOLOv8</span>
+            <span class="skill-pill featured">ByteTrack Tracking</span>
+            <span class="skill-pill featured">OpenCV</span>
+            <span class="skill-pill">RTSP Sub-streams</span>
+            <span class="skill-pill">HuggingFace Transformers</span>
+          </div>
+        </div>
+
+        <div class="skill-category-card">
+          <div class="skill-cat-header">
+            <div class="skill-cat-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+            </div>
+            <h3 class="skill-cat-title">DevOps &amp; Infrastructure</h3>
+          </div>
+          <div class="skill-chips-list">
+            <span class="skill-pill featured">Docker &amp; Compose</span>
+            <span class="skill-pill featured">Git &amp; GitHub</span>
+            <span class="skill-pill">GitHub Actions CI/CD</span>
+            <span class="skill-pill">NetBird WireGuard Mesh</span>
+            <span class="skill-pill">Postman</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       Contact Section (Form + Rotating 3D Earth)
+       ====================================================================== -->
+  <section id="contact" class="section-wrapper">
+    <div class="container">
+      <p class="section-subtext">Get in touch</p>
+      <h2 class="section-headtext">Contact<span class="purple-dot">.</span></h2>
+
+      <div class="contact-layout">
+        
+        <!-- Contact Form Card -->
+        <div class="contact-card-box">
+          <form id="contact-form">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_template" value="table">
+            <input type="text" name="_honey" style="display:none">
+
+            <div class="form-group">
+              <label for="form-name" class="form-label">Your Name</label>
+              <input type="text" id="form-name" name="name" class="form-input" placeholder="What's your good name?" required autocomplete="name">
+            </div>
+
+            <div class="form-group">
+              <label for="form-email" class="form-label">Your Email</label>
+              <input type="email" id="form-email" name="email" class="form-input" placeholder="What's your email address?" required autocomplete="email">
+            </div>
+
+            <div class="form-group">
+              <label for="form-message" class="form-label">Your Message</label>
+              <textarea id="form-message" name="message" class="form-textarea" placeholder="What would you like to say or discuss?" required></textarea>
+            </div>
+
+            <button type="submit" id="btn-contact-submit" class="btn-contact-send">
+              <span id="btn-contact-text">Send Message</span>
+              <svg id="btn-contact-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+
+            <!-- Feedback Message Display -->
+            <div id="form-status" class="form-status-box" style="display:none;"></div>
+          </form>
+
+          <div style="margin-top: 1.75rem; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 0.75rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;">
+              <span>✉️ sarveshwadkar33@gmail.com</span>
+              <button class="btn-copy" data-copy="sarveshwadkar33@gmail.com" style="color: var(--accent-purple); font-family: var(--font-mono); font-size: 0.75rem;">Copy</button>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;">
+              <span>📞 +91 9321784816</span>
+              <button class="btn-copy" data-copy="9321784816" style="color: var(--accent-purple); font-family: var(--font-mono); font-size: 0.75rem;">Copy</button>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;">
+              <span>📍 Mumbai, Maharashtra, India</span>
+              <span style="color: var(--text-dim); font-size: 0.75rem;">IST (UTC+5:30)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3D Earth Globe Canvas -->
+        <div class="contact-3d-earth-container">
+          <canvas id="contact-earth-canvas"></canvas>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       Developer CLI Terminal Modal
+       ====================================================================== -->
+  <div class="terminal-modal-overlay" role="dialog" aria-modal="true" aria-label="Interactive Terminal">
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="window-dots">
+          <span class="window-dot dot-red terminal-close-btn" title="Close Terminal"></span>
+          <span class="window-dot dot-yellow"></span>
+          <span class="window-dot dot-green"></span>
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary);">sarvesh@sfit-mumbai:~ (zsh)</div>
+        <button class="terminal-close-btn" style="color: var(--text-secondary); font-size: 0.8rem; font-family: var(--font-mono);">[esc]</button>
+      </div>
+
+      <div class="terminal-body">
+        <div style="color: var(--text-secondary); margin-bottom: 1rem;">
+          Welcome to <span style="color: var(--accent-purple); font-weight: 700;">Sarvesh Wadkar</span>'s 3D portfolio CLI.<br>
+          Type a command below or click a quick tag to explore technical details.
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
+          <span class="term-chip" data-cmd="about">about</span>
+          <span class="term-chip" data-cmd="skills">skills</span>
+          <span class="term-chip" data-cmd="projects">projects</span>
+          <span class="term-chip" data-cmd="experience">experience</span>
+          <span class="term-chip" data-cmd="architecture">architecture</span>
+          <span class="term-chip" data-cmd="contact">contact</span>
+          <span class="term-chip" data-cmd="resume">resume</span>
+          <span class="term-chip" data-cmd="clear">clear</span>
+        </div>
+
+        <div id="terminal-cli-output"></div>
+
+        <div class="terminal-prompt-line">
+          <span class="terminal-prompt-label">sarvesh@sfit-mumbai:~$</span>
+          <input type="text" id="terminal-cli-input" class="terminal-input" placeholder="type 'help' and press Enter..." autocomplete="off" spellcheck="false">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       Resume Modal Viewer
+       ====================================================================== -->
+  <div id="resume-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Resume Preview">
+    <div class="resume-modal-card">
+      <div class="resume-modal-header">
+        <span style="font-weight: 700; color: var(--text-white); font-size: 1.1rem;">Sarvesh Wadkar — Resume</span>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <a href="https://drive.google.com/file/d/1KOlCKIPTA4m3qXLN1r_ubqgrEQaBaO2d/view?usp=drivesdk" target="_blank" rel="noopener noreferrer" class="btn-copy" style="color: #ffffff; font-family: var(--font-mono); font-size: 0.8rem;" title="Open Original PDF in Google Drive">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            <span>Open in Drive</span>
+          </a>
+          <button onclick="window.print()" class="btn-copy" style="color: var(--text-white); font-family: var(--font-mono); font-size: 0.8rem;" title="Print or Save as PDF">
+            <span>Print</span>
+          </button>
+          <button id="close-resume-modal" class="btn-copy" style="color: var(--text-secondary);" title="Close">✕</button>
+        </div>
+      </div>
+
+      <div class="resume-modal-body">
+        <div style="text-align: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+          <h2 style="font-size: 1.75rem; color: var(--text-white); margin-bottom: 0.25rem;">Sarvesh Wadkar</h2>
+          <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+            <span>📞 9321784816</span>
+            <span>✉️ sarveshwadkar33@gmail.com</span>
+            <span>📍 Mumbai, Maharashtra</span>
+            <span>🔗 github.com/Draken970</span>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div style="margin-bottom: 1.5rem;">
+          <h4 style="font-size: 0.85rem; font-family: var(--font-mono); color: var(--accent-purple); text-transform: uppercase; margin-bottom: 0.5rem;">Professional Summary</h4>
+          <p style="font-size: 0.925rem; color: var(--text-white); line-height: 1.6;">
+            Recent graduate (2026) and on-site full-stack developer intern building production systems with Next.js, TypeScript, Node.js and MongoDB, and integrating AI services into real applications. Experienced with real-time systems, concurrent users and hardware integrations. Seeking an entry-level AI full-stack engineering role.
+          </p>
+        </div>
+
+        <!-- Experience -->
+        <div style="margin-bottom: 1.5rem;">
+          <h4 style="font-size: 0.85rem; font-family: var(--font-mono); color: var(--accent-purple); text-transform: uppercase; margin-bottom: 0.5rem;">Experience</h4>
+          <div style="margin-bottom: 0.75rem;">
+            <div style="display: flex; justify-content: space-between; font-weight: 700; color: var(--text-white); font-size: 0.95rem;">
+              <span>Full Stack Developer Intern (On-Site) | AutoWhat</span>
+              <span style="font-family: var(--font-mono); font-size: 0.8rem; color: #34d399;">1st Sep 2026 – Present</span>
+            </div>
+            <ul style="padding-left: 1.25rem; font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5; list-style-type: disc; margin-top: 0.4rem;">
+              <li>Building Aahar, a manufacturing &amp; distribution ERP (Next.js 15, MongoDB) with role-based access and automated inventory, invoicing and payment flows.</li>
+              <li>Building an AI CCTV people-detection system: a Python/FastAPI worker that reads live RTSP streams from the building’s NVR, detects people with YOLOv8 and tracks them with ByteTrack, designed to scale to 15+ cameras.</li>
+              <li>Architected for on-site production: inference runs next to the NVR on low-resolution sub-streams, with remote access over a private NetBird VPN instead of exposing the NVR to the internet.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Projects -->
+        <div style="margin-bottom: 1.5rem;">
+          <h4 style="font-size: 0.85rem; font-family: var(--font-mono); color: var(--accent-purple); text-transform: uppercase; margin-bottom: 0.5rem;">Key Projects</h4>
+          <div style="margin-bottom: 0.75rem;">
+            <div style="font-weight: 700; color: var(--text-white); font-size: 0.95rem;">CineBook | Node.js, Socket.io, PostgreSQL, Redis (2026)</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">Architected Redis SET NX atomic locking eliminating double-booking across 100+ concurrent users with sub-100ms WebSocket sync and Docker Compose containerization.</p>
+          </div>
+          <div>
+            <div style="font-weight: 700; color: var(--text-white); font-size: 0.95rem;">Verif-Ai | Python, Streamlit, HuggingFace (2026)</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">LLM hallucination detector checking generated answers against source text using HuggingFace cross-encoder NLI models.</p>
+          </div>
+        </div>
+
+        <!-- Education -->
+        <div>
+          <h4 style="font-size: 0.85rem; font-family: var(--font-mono); color: var(--accent-purple); text-transform: uppercase; margin-bottom: 0.5rem;">Education &amp; Certifications</h4>
+          <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6;">
+            <div><strong>St. Francis Institute of Technology (SFIT)</strong> (Class of 2026) — Recent Graduate</div>
+            <div><strong>Nirmala Memorial Foundation</strong> (HSC 2022) | <strong>P.J. Pancholia High School</strong> (SSC 2020)</div>
+            <div><strong>Certifications:</strong> Full-Stack Web Development (MERN) &amp; Java DSA — Apna College</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       Footer
+       ====================================================================== -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div>
+        <div style="font-weight: 700; color: var(--text-white); font-size: 1rem;">Sarvesh Wadkar</div>
+        <div style="font-size: 0.8rem; color: var(--text-secondary);">AI Full-Stack Systems Engineer · 3D Interactive Portfolio</div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <a href="https://github.com/Draken970" target="_blank" rel="noopener noreferrer" style="color: var(--text-secondary); font-size: 0.85rem;">github.com/Draken970</a>
+        <a href="#hero" style="color: var(--accent-purple); font-size: 0.85rem;">Back to Top ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+</body>
+</html>
