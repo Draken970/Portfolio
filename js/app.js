@@ -1302,7 +1302,6 @@ if (result.matchedCount === 0) {
    -------------------------------------------------------------------------- */
 function initBackgroundMusic() {
   const toggleBtn = document.getElementById('bgm-toggle-btn');
-  const bgmLabel = document.getElementById('bgm-label');
   const audioEl = document.getElementById('bgm-player');
   let isPlaying = false;
   let synthEngine = null;
@@ -1364,7 +1363,8 @@ function initBackgroundMusic() {
   async function playMusic() {
     isPlaying = true;
     toggleBtn.classList.add('playing');
-    if (bgmLabel) bgmLabel.textContent = 'MUSIC: ON';
+    toggleBtn.setAttribute('title', 'Pause Background Music');
+    toggleBtn.setAttribute('aria-label', 'Pause Background Music');
 
     if (audioEl) {
       try {
@@ -1383,7 +1383,8 @@ function initBackgroundMusic() {
   function pauseMusic() {
     isPlaying = false;
     toggleBtn.classList.remove('playing');
-    if (bgmLabel) bgmLabel.textContent = 'MUSIC: OFF';
+    toggleBtn.setAttribute('title', 'Play Background Music');
+    toggleBtn.setAttribute('aria-label', 'Play Background Music');
 
     if (audioEl) {
       try { audioEl.pause(); } catch(e) {}

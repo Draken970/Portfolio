@@ -46,14 +46,18 @@
       </nav>
 
       <div class="nav-actions">
-        <button id="bgm-toggle-btn" class="btn-bgm-toggle" title="Toggle Chill Background Music" aria-label="Toggle Background Music">
+        <button id="bgm-toggle-btn" class="btn-bgm-toggle" title="Play / Pause Background Music" aria-label="Toggle Background Music">
+          <svg class="music-note-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18V5l12-2v13"></path>
+            <circle cx="6" cy="18" r="3"></circle>
+            <circle cx="18" cy="16" r="3"></circle>
+          </svg>
           <span class="eq-visualizer">
             <span class="eq-bar bar-1"></span>
             <span class="eq-bar bar-2"></span>
             <span class="eq-bar bar-3"></span>
             <span class="eq-bar bar-4"></span>
           </span>
-          <span id="bgm-label">MUSIC</span>
         </button>
         <button class="btn-terminal-toggle" title="Open Interactive CLI Terminal" aria-label="Open Terminal">
           <span>&gt;_</span> CLI

@@ -313,23 +313,35 @@ img {
 .btn-bgm-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.775rem;
-  font-weight: 600;
+  justify-content: center;
+  gap: 0.45rem;
   color: var(--text-secondary);
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 0.45rem 0.85rem;
+  padding: 0.45rem 0.7rem;
+  height: 38px;
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all var(--transition-fast);
+}
+
+.btn-bgm-toggle .music-note-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .btn-bgm-toggle:hover {
   background: rgba(255, 255, 255, 0.09);
   color: #ffffff;
   border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.btn-bgm-toggle:hover .music-note-icon {
+  transform: scale(1.15);
 }
 
 .btn-bgm-toggle.playing {
@@ -337,6 +349,11 @@ img {
   border-color: var(--accent-purple);
   color: #34d399;
   box-shadow: 0 0 14px var(--accent-purple-glow);
+}
+
+.btn-bgm-toggle.playing .music-note-icon {
+  color: #34d399;
+  filter: drop-shadow(0 0 4px rgba(52, 211, 153, 0.5));
 }
 
 .eq-visualizer {
