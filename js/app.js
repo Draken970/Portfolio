@@ -64,33 +64,66 @@ function initNavbarScroll() {
 function initMobileMenu() {
   const toggleBtn = document.querySelector('.mobile-menu-toggle');
   const navLinks = document.querySelector('.nav-links');
+  const backdrop = document.getElementById('mobile-nav-backdrop');
+  const mobileTerminalBtn = document.querySelector('.btn-terminal-mobile');
 
   if (!toggleBtn || !navLinks) return;
 
-  toggleBtn.addEventListener('click', () => {
-    const isOpen = navLinks.style.display === 'flex';
-    if (isOpen) {
-      navLinks.style.display = 'none';
+  function openMenu() {
+    navLinks.classList.add('open');
+    toggleBtn.classList.add('active');
+    toggleBtn.setAttribute('aria-expanded', 'true');
+    if (backdrop) backdrop.classList.add('active');
+    document.body.classList.add('nav-open');
+  }
+
+  function closeMenu() {
+    navLinks.classList.remove('open');
+    toggleBtn.classList.remove('active');
+    toggleBtn.setAttribute('aria-expanded', 'false');
+    if (backdrop) backdrop.classList.remove('active');
+    document.body.classList.remove('nav-open');
+  }
+
+  toggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (navLinks.classList.contains('open')) {
+      closeMenu();
     } else {
-      navLinks.style.display = 'flex';
-      navLinks.style.flexDirection = 'column';
-      navLinks.style.position = 'absolute';
-      navLinks.style.top = 'var(--header-height)';
-      navLinks.style.left = '0';
-      navLinks.style.width = '100%';
-      navLinks.style.backgroundColor = 'rgba(0, 0, 0, 0.98)';
-      navLinks.style.padding = '1.75rem';
-      navLinks.style.borderBottom = '1px solid rgba(145, 94, 255, 0.25)';
-      navLinks.style.gap = '1.5rem';
+      openMenu();
     }
   });
 
+  if (backdrop) {
+    backdrop.addEventListener('click', closeMenu);
+  }
+
   navLinks.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      if (window.innerWidth <= 768) {
-        navLinks.style.display = 'none';
+    link.addEventListener('click', closeMenu);
+  });
+
+  if (mobileTerminalBtn) {
+    mobileTerminalBtn.addEventListener('click', () => {
+      closeMenu();
+      const terminalOverlay = document.querySelector('.terminal-modal-overlay');
+      const terminalInput = document.getElementById('terminal-cli-input');
+      if (terminalOverlay) {
+        terminalOverlay.classList.add('open');
+        if (terminalInput) setTimeout(() => terminalInput.focus(), 150);
       }
     });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+      closeMenu();
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768 && navLinks.classList.contains('open')) {
+      closeMenu();
+    }
   });
 }
 
@@ -274,6 +307,28 @@ function initHero3DCanvas() {
     }
   });
 
+  // Touch Drag Support for Mobile & Tablets
+  canvas.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      isDragging = true;
+      lastMouseX = e.touches[0].clientX;
+      lastMouseY = e.touches[0].clientY;
+    }
+  }, { passive: true });
+
+  window.addEventListener('touchend', () => { isDragging = false; }, { passive: true });
+
+  window.addEventListener('touchmove', (e) => {
+    if (isDragging && e.touches.length === 1) {
+      const dx = e.touches[0].clientX - lastMouseX;
+      const dy = e.touches[0].clientY - lastMouseY;
+      targetRotY += dx * 0.012;
+      targetRotX += dy * 0.012;
+      lastMouseX = e.touches[0].clientX;
+      lastMouseY = e.touches[0].clientY;
+    }
+  }, { passive: true });
+
   function renderHero3D() {
     ctx.clearRect(0, 0, width, height);
 
@@ -409,14 +464,59 @@ function initContactEarth3D() {
     height = canvas.height = canvas.parentElement.offsetHeight;
   });
 
-  const globeRadius = Math.min(width, height) * 0.38;
   let rotY = 0;
   let rotX = 0.25;
+  let isDragging = false;
+  let lastMouseX = 0;
+  let lastMouseY = 0;
+
+  canvas.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
+  });
+
+  window.addEventListener('mouseup', () => (isDragging = false));
+
+  window.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      const dx = e.clientX - lastMouseX;
+      const dy = e.clientY - lastMouseY;
+      rotY += dx * 0.01;
+      rotX += dy * 0.005;
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+    }
+  });
+
+  canvas.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      isDragging = true;
+      lastMouseX = e.touches[0].clientX;
+      lastMouseY = e.touches[0].clientY;
+    }
+  }, { passive: true });
+
+  window.addEventListener('touchend', () => (isDragging = false), { passive: true });
+
+  window.addEventListener('touchmove', (e) => {
+    if (isDragging && e.touches.length === 1) {
+      const dx = e.touches[0].clientX - lastMouseX;
+      const dy = e.touches[0].clientY - lastMouseY;
+      rotY += dx * 0.01;
+      rotX += dy * 0.005;
+      lastMouseX = e.touches[0].clientX;
+      lastMouseY = e.touches[0].clientY;
+    }
+  }, { passive: true });
 
   function renderEarth() {
     ctx.clearRect(0, 0, width, height);
-    rotY += 0.007;
+    if (!isDragging) {
+      rotY += 0.007;
+    }
 
+    const globeRadius = Math.min(width, height) * 0.38;
     const cx = width / 2;
     const cy = height / 2;
 

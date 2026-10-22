@@ -155,19 +155,19 @@ img {
   max-width: var(--max-width);
   margin-left: auto;
   margin-right: auto;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  padding-left: clamp(1rem, 3.5vw, 2rem);
+  padding-right: clamp(1rem, 3.5vw, 2rem);
 }
 
 .section-wrapper {
-  padding: 6.5rem 0;
+  padding: clamp(3.5rem, 7vw, 6.5rem) 0;
   position: relative;
 }
 
 /* Section Header Typography (Signature 3D Portfolio Style) */
 .section-subtext {
   font-family: var(--font-mono);
-  font-size: 0.95rem;
+  font-size: clamp(0.8rem, 1.5vw, 0.95rem);
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -186,15 +186,17 @@ img {
   background-color: var(--accent-purple);
   border-radius: 50%;
   box-shadow: 0 0 10px var(--accent-purple);
+  flex-shrink: 0;
 }
 
 .section-headtext {
-  font-size: 3.25rem;
+  font-size: clamp(1.85rem, 5vw, 3.25rem);
   font-weight: 800;
   color: var(--text-white);
   letter-spacing: -0.02em;
   line-height: 1.15;
   margin-bottom: 1.25rem;
+  word-break: break-word;
 }
 
 .section-headtext .purple-dot {
@@ -202,7 +204,7 @@ img {
 }
 
 .section-desc {
-  font-size: 1.05rem;
+  font-size: clamp(0.925rem, 1.8vw, 1.05rem);
   color: var(--text-secondary);
   max-width: 800px;
   line-height: 1.7;
@@ -431,9 +433,70 @@ img {
 
 .mobile-menu-toggle {
   display: none;
-  color: var(--text-secondary);
-  font-size: 1.5rem;
-  padding: 0.25rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-white);
+  padding: 0.45rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mobile-menu-toggle:hover {
+  background: rgba(145, 94, 255, 0.16);
+  border-color: var(--accent-purple);
+  color: #fff;
+}
+
+.hamburger-icon {
+  display: block;
+  transition: transform 0.25s ease;
+}
+
+.hamburger-icon line {
+  transition: all 0.25s ease;
+  transform-origin: center;
+}
+
+.mobile-menu-toggle.active .hamburger-icon .line-1 {
+  transform: rotate(45deg) translate(4px, 4px);
+}
+.mobile-menu-toggle.active .hamburger-icon .line-2 {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.mobile-menu-toggle.active .hamburger-icon .line-3 {
+  transform: rotate(-45deg) translate(4px, -4px);
+}
+
+/* Mobile backdrop */
+.mobile-nav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 998;
+}
+
+.mobile-nav-backdrop.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Mobile extras hidden on desktop */
+.nav-mobile-extras {
+  display: none;
 }
 
 /* --------------------------------------------------------------------------
@@ -549,11 +612,12 @@ img {
 }
 
 .hero-title {
-  font-size: 4rem;
+  font-size: clamp(2.35rem, 7vw, 4rem);
   font-weight: 800;
   color: var(--text-white);
   letter-spacing: -0.02em;
   line-height: 1.1;
+  word-break: break-word;
 }
 
 .hero-title .name-highlight {
@@ -577,10 +641,11 @@ img {
   align-items: center;
   gap: 0.45rem;
   font-family: var(--font-mono);
-  font-size: 1.15rem;
+  font-size: clamp(0.95rem, 2.5vw, 1.2rem);
   font-weight: 600;
   color: #c4b5fd;
   min-height: 1.8rem;
+  flex-wrap: wrap;
 }
 
 .typewriter-prompt {
@@ -614,10 +679,10 @@ img {
    -------------------------------------------------------------------------- */
 
 .hero-subtitle {
-  font-size: 1.5rem;
+  font-size: clamp(1.05rem, 2.2vw, 1.45rem);
   font-weight: 500;
   color: var(--text-secondary);
-  line-height: 1.45;
+  line-height: 1.5;
   max-width: 700px;
 }
 
@@ -2004,21 +2069,45 @@ img {
 }
 
 /* --------------------------------------------------------------------------
-   17. Responsive Breakpoints
+   17. Comprehensive Fluid Responsive Breakpoints (320px to 4K Ultrawide)
    -------------------------------------------------------------------------- */
+
+/* --- A. Ultrawide & High-Resolution Displays (1440px+) --- */
+@media (min-width: 1440px) {
+  :root {
+    --max-width: 1320px;
+  }
+  .container {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+/* --- B. Standard Desktops & Laptops (1025px - 1200px) --- */
+@media (max-width: 1200px) {
+  .projects-grid {
+    gap: 1.5rem;
+  }
+  .overview-grid {
+    gap: 1.25rem;
+  }
+  .skills-grid {
+    gap: 1.25rem;
+  }
+}
+
+/* --- C. Tablets & Small Laptops (max-width: 1024px) --- */
 @media (max-width: 1024px) {
   .hero-content-split {
     grid-template-columns: 1fr;
-    gap: 2.5rem;
+    gap: 2.25rem;
   }
   .hero-3d-stage {
-    height: 320px;
-  }
-  .hero-title {
-    font-size: 3.25rem;
+    height: clamp(260px, 36vw, 340px);
   }
   .metrics-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
   }
   .overview-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -2031,17 +2120,20 @@ img {
   }
   .contact-layout {
     grid-template-columns: 1fr;
+    gap: 2.5rem;
   }
   .contact-3d-earth-container {
-    height: 380px;
+    height: 360px;
   }
   .github-activity-strip {
     grid-template-columns: 1fr;
+    gap: 2rem;
   }
 }
 
+/* --- D. Tablet Portrait & Narrow Windows (max-width: 860px) --- */
 @media (max-width: 860px) {
-  /* Timeline responsive adjustment */
+  /* Timeline: shift central spine to sleek left-aligned timeline */
   .vertical-timeline::before {
     left: 28px;
   }
@@ -2067,34 +2159,529 @@ img {
     border-right: 10px solid var(--bg-card);
     border-left: none;
   }
-}
 
-@media (max-width: 768px) {
-  .nav-links {
-    display: none;
-  }
-  .mobile-menu-toggle {
-    display: block;
-  }
-  .hero-title {
-    font-size: 2.6rem;
-  }
-  .hero-subtitle {
-    font-size: 1.15rem;
-  }
-  .metrics-grid {
-    grid-template-columns: 1fr;
-  }
-  .overview-grid {
-    grid-template-columns: 1fr;
-  }
-  .projects-grid {
-    grid-template-columns: 1fr;
-  }
-  .skills-grid {
-    grid-template-columns: 1fr;
-  }
   .inspector-body {
     grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+
+/* --- E. Phablets & Mobile Landscape (max-width: 768px) --- */
+@media (max-width: 768px) {
+  :root {
+    --header-height: 70px;
+  }
+
+  /* Mobile Slide-Down / Off-Canvas Navigation Drawer */
+  .nav-links {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: rgba(6, 6, 8, 0.97);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(145, 94, 255, 0.28);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.95);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 1.25rem 1.5rem 1.75rem;
+    transform: translateY(-120%);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, visibility 0.25s ease;
+    z-index: 999;
+    max-height: calc(100vh - var(--header-height));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nav-links.open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .nav-links .nav-link {
+    padding: 0.95rem 0.5rem;
+    font-size: 1.05rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text-secondary);
+  }
+
+  .nav-links .nav-link:hover,
+  .nav-links .nav-link.active {
+    color: var(--text-white);
+  }
+
+  .nav-links .nav-link.active::after {
+    display: none;
+  }
+
+  /* Mobile Menu Extras inside Drawer */
+  .nav-mobile-extras {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .btn-terminal-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+  }
+
+  .btn-terminal-mobile:hover {
+    background: rgba(145, 94, 255, 0.15);
+    border-color: var(--accent-purple);
+  }
+
+  .btn-resume-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent-purple), #7c3aed);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 15px rgba(145, 94, 255, 0.35);
+  }
+
+  .mobile-menu-toggle {
+    display: flex;
+  }
+
+  /* Hero Section Mobile Spacing */
+  .hero-section {
+    padding-top: calc(var(--header-height) + 1.5rem);
+    padding-bottom: 3.5rem;
+    min-height: auto;
+  }
+
+  /* Projects Filter Bar: smooth touch horizontal scroll */
+  .projects-filter-bar {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 0.6rem;
+    margin-bottom: 2rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .projects-filter-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* Architecture Tabs Bar: smooth touch horizontal scroll */
+  .arch-tabs-nav {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .arch-tabs-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .arch-tab-btn {
+    flex-shrink: 0;
+  }
+
+  .arch-inspector-box .inspector-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .inspector-code {
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+    font-size: 0.725rem;
+  }
+
+  /* Modals: Mobile Fluid Optimization */
+  .terminal-modal-overlay,
+  .modal-overlay {
+    padding: 1rem;
+  }
+
+  .terminal-window,
+  .resume-modal-card,
+  .case-study-modal-card {
+    max-height: 92vh;
+    width: 100%;
+  }
+}
+
+/* --- F. Standard Mobile Screens (max-width: 640px) --- */
+@media (max-width: 640px) {
+  :root {
+    --header-height: 64px;
+  }
+
+  /* Condense Brand Text */
+  .brand-subtext {
+    display: none;
+  }
+
+  /* Hero Layout: Stack into single column, hide indicator line for maximum text width */
+  .hero-main-layout {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .hero-indicator-column {
+    display: none;
+  }
+
+  .hero-cta-buttons {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0.75rem;
+  }
+
+  .btn-hero-primary,
+  .btn-hero-secondary {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    padding: 0.85rem 1.25rem;
+  }
+
+  .hero-3d-stage {
+    height: clamp(230px, 48vw, 290px);
+    margin-top: 0.5rem;
+  }
+
+  /* Single Column Grids for Clean Visual Flow */
+  .metrics-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .overview-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .overview-card-inner {
+    min-height: auto;
+    padding: 1.75rem 1.25rem;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  /* Contact Section */
+  .contact-card-box {
+    padding: 1.6rem 1.25rem;
+  }
+
+  .contact-3d-earth-container {
+    height: 280px;
+  }
+
+  /* Form font-size 16px to prevent iOS auto-zoom */
+  .form-input,
+  .form-textarea {
+    font-size: 16px;
+    padding: 0.8rem 1rem;
+  }
+
+  /* GitHub Strip */
+  .github-activity-strip {
+    padding: 1.5rem 1.2rem;
+  }
+
+  /* Modals padding */
+  .resume-modal-body,
+  .case-study-body {
+    padding: 1.25rem;
+  }
+
+  .terminal-body {
+    padding: 1rem;
+    min-height: 240px;
+  }
+
+  /* Footer */
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+  }
+}
+
+/* --- G. Small Mobile Phones (max-width: 480px) --- */
+@media (max-width: 480px) {
+  /* Ultra-compact Navbar Actions */
+  .nav-actions {
+    gap: 0.45rem;
+  }
+
+  .btn-bgm-toggle {
+    padding: 0.4rem 0.55rem;
+    height: 36px;
+  }
+
+  .btn-terminal-toggle {
+    padding: 0.4rem 0.65rem;
+    height: 36px;
+  }
+
+  .btn-terminal-toggle .cli-text {
+    display: none;
+  }
+
+  .btn-resume {
+    padding: 0.45rem 0.75rem;
+    height: 36px;
+    font-size: 0.8rem;
+  }
+
+  .btn-resume .resume-text {
+    display: none;
+  }
+
+  .btn-resume svg {
+    margin: 0;
+  }
+
+  .mobile-menu-toggle {
+    width: 36px;
+    height: 36px;
+    padding: 0.35rem;
+  }
+
+  /* Compact Timeline Gutter (gives 30px+ extra reading space) */
+  .vertical-timeline {
+    padding: 1rem 0;
+  }
+
+  .vertical-timeline::before {
+    left: 14px;
+  }
+
+  .timeline-node-icon {
+    left: 14px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .timeline-node-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .timeline-content-card {
+    width: calc(100% - 36px);
+    margin-left: 36px;
+    padding: 1.25rem 0.95rem;
+    border-radius: var(--radius-md);
+  }
+
+  .timeline-entry.left .timeline-content-card::after,
+  .timeline-entry.right .timeline-content-card::after {
+    left: -8px;
+    border-right-width: 8px;
+    border-top-width: 8px;
+    border-bottom-width: 8px;
+    top: 24px;
+  }
+
+  .timeline-job-title {
+    font-size: 1.15rem;
+  }
+
+  .timeline-company-name {
+    font-size: 0.9rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .timeline-bullet-item {
+    font-size: 0.825rem;
+    line-height: 1.5;
+    padding-left: 1rem;
+  }
+
+  .timeline-tech-chips {
+    gap: 0.35rem;
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+  }
+
+  .timeline-chip {
+    font-size: 0.68rem;
+    padding: 0.2rem 0.45rem;
+  }
+
+  /* Architecture Inspector */
+  .arch-tab-btn {
+    padding: 0.85rem 0.95rem;
+    font-size: 0.775rem;
+  }
+
+  .arch-tab-content {
+    padding: 1.25rem 0.85rem;
+  }
+
+  .arch-pipeline-visual {
+    padding: 1.25rem 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .arch-node {
+    min-width: 130px;
+    padding: 0.8rem 0.85rem;
+  }
+
+  .arch-node-name {
+    font-size: 0.825rem;
+  }
+
+  .arch-node-metric {
+    font-size: 0.675rem;
+  }
+
+  /* Skill Pills */
+  .skill-pill {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.65rem;
+  }
+
+  /* Project Image */
+  .project-img-wrapper {
+    height: 180px;
+  }
+
+  /* Modals Overlay */
+  .terminal-modal-overlay,
+  .modal-overlay {
+    padding: 0.5rem;
+  }
+
+  .terminal-window,
+  .resume-modal-card,
+  .case-study-modal-card {
+    max-height: 94vh;
+    border-radius: var(--radius-sm);
+  }
+
+  .terminal-prompt-label {
+    font-size: 0.75rem;
+  }
+
+  /* Toasts */
+  .toast-container {
+    bottom: 1rem;
+    right: 1rem;
+    left: 1rem;
+  }
+
+  .toast {
+    width: 100%;
+  }
+}
+
+/* --- H. Micro Mobile Screens & Foldables (max-width: 360px) --- */
+@media (max-width: 360px) {
+  .brand-icon-box {
+    width: 30px;
+    height: 30px;
+    font-size: 0.85rem;
+  }
+
+  .brand-text {
+    font-size: 1rem;
+  }
+
+  .hero-status-pill {
+    font-size: 0.725rem;
+    padding: 0.3rem 0.75rem;
+  }
+
+  .hero-title {
+    font-size: 1.95rem;
+  }
+
+  .section-headtext {
+    font-size: 1.75rem;
+  }
+
+  .metric-card {
+    padding: 1.2rem 1rem;
+  }
+
+  .metric-number {
+    font-size: 1.85rem;
+  }
+
+  .btn-hero-primary,
+  .btn-hero-secondary {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* --- I. Landscape Mobile Fix (Phones held horizontally) --- */
+@media (max-height: 520px) and (orientation: landscape) {
+  :root {
+    --header-height: 56px;
+  }
+
+  .hero-section {
+    min-height: auto;
+    padding-top: calc(var(--header-height) + 1rem);
+    padding-bottom: 2rem;
+  }
+
+  .hero-3d-stage {
+    height: 200px;
+  }
+
+  .terminal-window,
+  .resume-modal-card,
+  .case-study-modal-card {
+    max-height: 96vh;
   }
 }
