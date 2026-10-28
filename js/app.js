@@ -91,15 +91,6 @@ function initThemeToggle() {
   // Expose global helper for terminal command
   window.__setPortfolioTheme = setTheme;
 
-  try {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
-    mediaQuery.addEventListener('change', (e) => {
-      if (!localStorage.getItem('portfolio-theme')) {
-        setTheme(e.matches ? 'light' : 'dark', false);
-      }
-    });
-  } catch (e) { }
-
   updateThemeUI(getActiveTheme());
 }
 
@@ -453,116 +444,256 @@ function initHero3DCanvas() {
       const oz = Math.sin(a) * (radius * 1.5);
       const oy = 0;
 
-      window.addEventListener('touchmove', (e) => {
-        if (isDragging && e.touches.length === 1) {
-          const dx = e.touches[0].clientX - lastMouseX;
-          const dy = e.touches[0].clientY - lastMouseY;
-          rotY += dx * 0.01;
-          rotX += dy * 0.005;
-          lastMouseX = e.touches[0].clientX;
-          lastMouseY = e.touches[0].clientY;
-        }
-      }, { passive: true });
+      let x1 = ox * Math.cos(rotY * 0.8) - oz * Math.sin(rotY * 0.8);
+      let z1 = oz * Math.cos(rotY * 0.8) + ox * Math.sin(rotY * 0.8);
+      let y2 = oy * Math.cos(rotX * 0.8 + 0.4) - z1 * Math.sin(rotX * 0.8 + 0.4);
+      let z2 = z1 * Math.cos(rotX * 0.8 + 0.4) + oy * Math.sin(rotX * 0.8 + 0.4);
 
-      function renderEarth() {
-        ctx.clearRect(0, 0, width, height);
-        if (!isDragging) {
-          rotY += 0.007;
-        }
+      const scale = fov / (fov + z2 + 100);
+      const px = cx + x1 * scale;
+      const py = cy + y2 * scale;
 
-        const globeRadius = Math.min(width, height) * 0.38;
-        const cx = width / 2;
-        const cy = height / 2;
-
-        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-
-        // Atmosphere halo glow
-        const halo = ctx.createRadialGradient(cx, cy, globeRadius * 0.8, cx, cy, globeRadius * 1.25);
-        if (isLight) {
-          halo.addColorStop(0, 'rgba(124, 58, 237, 0.25)');
-          halo.addColorStop(0.5, 'rgba(99, 102, 241, 0.1)');
-          halo.addColorStop(1, 'rgba(255, 255, 255, 0)');
-        } else {
-          halo.addColorStop(0, 'rgba(145, 94, 255, 0.35)');
-          halo.addColorStop(0.5, 'rgba(145, 94, 255, 0.15)');
-          halo.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        }
-        ctx.fillStyle = halo;
-        ctx.beginPath();
-        ctx.arc(cx, cy, globeRadius * 1.25, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Earth Core
-        const earthBase = ctx.createRadialGradient(cx - globeRadius * 0.3, cy - globeRadius * 0.3, 10, cx, cy, globeRadius);
-        if (isLight) {
-          earthBase.addColorStop(0, '#f1f5f9');
-          earthBase.addColorStop(0.7, '#e2e8f0');
-          earthBase.addColorStop(1, '#cbd5e1');
-        } else {
-          earthBase.addColorStop(0, '#1c1c1c');
-          earthBase.addColorStop(0.7, '#0b0b0b');
-          earthBase.addColorStop(1, '#000000');
-        }
-        ctx.fillStyle = earthBase;
-        ctx.beginPath();
-        ctx.arc(cx, cy, globeRadius, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Draw Longitude Lines
-        for (let lng = 0; lng < Math.PI; lng += Math.PI / 8) {
-          ctx.beginPath();
-          for (let lat = -Math.PI / 2; lat <= Math.PI / 2; lat += 0.1) {
-            const x = globeRadius * Math.cos(lat) * Math.sin(lng + rotY);
-            const z = globeRadius * Math.cos(lat) * Math.cos(lng + rotY);
-            const y = globeRadius * Math.sin(lat);
-
-            if (z > 0) {
-              const px = cx + x;
-              const py = cy + y * Math.cos(rotX) - z * Math.sin(rotX) * 0.3;
-              if (lat === -Math.PI / 2) ctx.moveTo(px, py);
-              else ctx.lineTo(px, py);
-            }
-          }
-          ctx.strokeStyle = isLight ? 'rgba(124, 58, 237, 0.35)' : 'rgba(145, 94, 255, 0.22)';
-          ctx.lineWidth = 1;
-          ctx.stroke();
-        }
-
-        // Draw Latitude Lines
-        for (let lat = -Math.PI / 3; lat <= Math.PI / 3; lat += Math.PI / 6) {
-          ctx.beginPath();
-          for (let lng = 0; lng <= Math.PI * 2; lng += 0.1) {
-            const x = globeRadius * Math.cos(lat) * Math.sin(lng + rotY);
-            const z = globeRadius * Math.cos(lat) * Math.cos(lng + rotY);
-            const y = globeRadius * Math.sin(lat);
-
-            if (z > 0) {
-              const px = cx + x;
-              const py = cy + y * Math.cos(rotX) - z * Math.sin(rotX) * 0.3;
-              if (lng === 0) ctx.moveTo(px, py);
-              else ctx.lineTo(px, py);
-            }
-          }
-          ctx.strokeStyle = isLight ? 'rgba(99, 102, 241, 0.3)' : 'rgba(255, 255, 255, 0.22)';
-          ctx.lineWidth = 1;
-          ctx.stroke();
-        }
-
-        // Outer Rim Glow
-        ctx.beginPath();
-        ctx.arc(cx, cy, globeRadius, 0, Math.PI * 2);
-        ctx.strokeStyle = isLight ? 'rgba(124, 58, 237, 0.7)' : 'rgba(145, 94, 255, 0.7)';
-        ctx.lineWidth = 2;
-        ctx.shadowColor = isLight ? '#7c3aed' : '#915eff';
-        ctx.shadowBlur = 15;
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-
-        requestAnimationFrame(renderEarth);
-      }
-
-      renderEarth();
+      if (a === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
     }
+    ctx.strokeStyle = isLight ? 'rgba(124, 58, 237, 0.45)' : 'rgba(145, 94, 255, 0.45)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Outer Orbital Ring 2 (Crisp Silver-White)
+    ctx.beginPath();
+    for (let a = 0; a <= Math.PI * 2; a += 0.1) {
+      const ox = Math.cos(a) * (radius * 1.35);
+      const oy = Math.sin(a) * (radius * 1.35);
+      const oz = 0;
+
+      let x1 = ox * Math.cos(-rotY * 0.6) - oz * Math.sin(-rotY * 0.6);
+      let z1 = oz * Math.cos(-rotY * 0.6) + ox * Math.sin(-rotY * 0.6);
+      let y2 = oy * Math.cos(-rotX * 0.6 - 0.5) - z1 * Math.sin(-rotX * 0.6 - 0.5);
+      let z2 = z1 * Math.cos(-rotX * 0.6 - 0.5) + oy * Math.sin(-rotX * 0.6 - 0.5);
+
+      const scale = fov / (fov + z2 + 100);
+      const px = cx + x1 * scale;
+      const py = cy + y2 * scale;
+
+      if (a === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.strokeStyle = isLight ? 'rgba(99, 102, 241, 0.35)' : 'rgba(255, 255, 255, 0.35)';
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+
+    // Draw Edges with glowing gradient
+    edges.forEach(([i, j]) => {
+      const p1 = projected[i];
+      const p2 = projected[j];
+      const avgZ = (p1.z + p2.z) / 2;
+      const alpha = Math.max(0.15, Math.min(0.9, (avgZ + radius) / (radius * 2) * 0.8 + 0.2));
+
+      ctx.beginPath();
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
+      ctx.strokeStyle = isLight ? `rgba(124, 58, 237, ${alpha})` : `rgba(145, 94, 255, ${alpha})`;
+      ctx.lineWidth = 1.8 * Math.max(p1.scale, p2.scale);
+      ctx.stroke();
+    });
+
+    // Draw Vertices Nodes
+    projected.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 4 * p.scale, 0, Math.PI * 2);
+      ctx.fillStyle = isLight ? '#7c3aed' : '#ffffff';
+      ctx.shadowColor = isLight ? '#7c3aed' : '#ffffff';
+      ctx.shadowBlur = 10;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    });
+
+    // Central core glow
+    const coreGrad = ctx.createRadialGradient(cx, cy, 5, cx, cy, radius * 0.75);
+    if (isLight) {
+      coreGrad.addColorStop(0, 'rgba(124, 58, 237, 0.35)');
+      coreGrad.addColorStop(0.5, 'rgba(124, 58, 237, 0.15)');
+      coreGrad.addColorStop(1, 'rgba(124, 58, 237, 0)');
+    } else {
+      coreGrad.addColorStop(0, 'rgba(145, 94, 255, 0.55)');
+      coreGrad.addColorStop(0.5, 'rgba(145, 94, 255, 0.25)');
+      coreGrad.addColorStop(1, 'rgba(145, 94, 255, 0)');
+    }
+    ctx.fillStyle = coreGrad;
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius * 0.8, 0, Math.PI * 2);
+    ctx.fill();
+
+    requestAnimationFrame(renderHero3D);
+  }
+
+  renderHero3D();
+}
+
+/* --------------------------------------------------------------------------
+   5. Contact Section 3D Rotating Earth Globe
+   -------------------------------------------------------------------------- */
+function initContactEarth3D() {
+  const canvas = document.getElementById('contact-earth-canvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  let width = (canvas.width = canvas.parentElement.offsetWidth);
+  let height = (canvas.height = canvas.parentElement.offsetHeight);
+
+  window.addEventListener('resize', () => {
+    if (!canvas.parentElement) return;
+    width = canvas.width = canvas.parentElement.offsetWidth;
+    height = canvas.height = canvas.parentElement.offsetHeight;
+  });
+
+  let rotY = 0;
+  let rotX = 0.25;
+  let isDragging = false;
+  let lastMouseX = 0;
+  let lastMouseY = 0;
+
+  canvas.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
+  });
+
+  window.addEventListener('mouseup', () => (isDragging = false));
+
+  window.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      const dx = e.clientX - lastMouseX;
+      const dy = e.clientY - lastMouseY;
+      rotY += dx * 0.01;
+      rotX += dy * 0.005;
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+    }
+  });
+
+  // Touch Drag Support for Mobile & Tablets
+  canvas.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      isDragging = true;
+      lastMouseX = e.touches[0].clientX;
+      lastMouseY = e.touches[0].clientY;
+    }
+  }, { passive: true });
+
+  window.addEventListener('touchend', () => (isDragging = false), { passive: true });
+
+  window.addEventListener('touchmove', (e) => {
+    if (isDragging && e.touches.length === 1) {
+      const dx = e.touches[0].clientX - lastMouseX;
+      const dy = e.touches[0].clientY - lastMouseY;
+      rotY += dx * 0.01;
+      rotX += dy * 0.005;
+      lastMouseX = e.touches[0].clientX;
+      lastMouseY = e.touches[0].clientY;
+    }
+  }, { passive: true });
+
+  function renderEarth() {
+    ctx.clearRect(0, 0, width, height);
+    if (!isDragging) {
+      rotY += 0.007;
+    }
+
+    const globeRadius = Math.min(width, height) * 0.38;
+    const cx = width / 2;
+    const cy = height / 2;
+
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+
+    // Atmosphere halo glow
+    const halo = ctx.createRadialGradient(cx, cy, globeRadius * 0.8, cx, cy, globeRadius * 1.25);
+    if (isLight) {
+      halo.addColorStop(0, 'rgba(124, 58, 237, 0.25)');
+      halo.addColorStop(0.5, 'rgba(99, 102, 241, 0.1)');
+      halo.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    } else {
+      halo.addColorStop(0, 'rgba(145, 94, 255, 0.35)');
+      halo.addColorStop(0.5, 'rgba(145, 94, 255, 0.15)');
+      halo.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    }
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(cx, cy, globeRadius * 1.25, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Earth Core
+    const earthBase = ctx.createRadialGradient(cx - globeRadius * 0.3, cy - globeRadius * 0.3, 10, cx, cy, globeRadius);
+    if (isLight) {
+      earthBase.addColorStop(0, '#f1f5f9');
+      earthBase.addColorStop(0.7, '#e2e8f0');
+      earthBase.addColorStop(1, '#cbd5e1');
+    } else {
+      earthBase.addColorStop(0, '#1c1c1c');
+      earthBase.addColorStop(0.7, '#0b0b0b');
+      earthBase.addColorStop(1, '#000000');
+    }
+    ctx.fillStyle = earthBase;
+    ctx.beginPath();
+    ctx.arc(cx, cy, globeRadius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Draw Longitude Lines
+    for (let lng = 0; lng < Math.PI; lng += Math.PI / 8) {
+      ctx.beginPath();
+      for (let lat = -Math.PI / 2; lat <= Math.PI / 2; lat += 0.1) {
+        const x = globeRadius * Math.cos(lat) * Math.sin(lng + rotY);
+        const z = globeRadius * Math.cos(lat) * Math.cos(lng + rotY);
+        const y = globeRadius * Math.sin(lat);
+
+        if (z > 0) {
+          const px = cx + x;
+          const py = cy + y * Math.cos(rotX) - z * Math.sin(rotX) * 0.3;
+          if (lat === -Math.PI / 2) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+      }
+      ctx.strokeStyle = isLight ? 'rgba(124, 58, 237, 0.35)' : 'rgba(145, 94, 255, 0.22)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // Draw Latitude Lines
+    for (let lat = -Math.PI / 3; lat <= Math.PI / 3; lat += Math.PI / 6) {
+      ctx.beginPath();
+      for (let lng = 0; lng <= Math.PI * 2; lng += 0.1) {
+        const x = globeRadius * Math.cos(lat) * Math.sin(lng + rotY);
+        const z = globeRadius * Math.cos(lat) * Math.cos(lng + rotY);
+        const y = globeRadius * Math.sin(lat);
+
+        if (z > 0) {
+          const px = cx + x;
+          const py = cy + y * Math.cos(rotX) - z * Math.sin(rotX) * 0.3;
+          if (lng === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+      }
+      ctx.strokeStyle = isLight ? 'rgba(99, 102, 241, 0.3)' : 'rgba(255, 255, 255, 0.22)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // Outer Rim Glow
+    ctx.beginPath();
+    ctx.arc(cx, cy, globeRadius, 0, Math.PI * 2);
+    ctx.strokeStyle = isLight ? 'rgba(124, 58, 237, 0.7)' : 'rgba(145, 94, 255, 0.7)';
+    ctx.lineWidth = 2;
+    ctx.shadowColor = isLight ? '#7c3aed' : '#915eff';
+    ctx.shadowBlur = 15;
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    requestAnimationFrame(renderEarth);
+  }
+
+  renderEarth();
+}
 
     /* --------------------------------------------------------------------------
        6. Interactive 3D Tilt Cards (Mouse Parallax Tilt on Hover)
@@ -1189,20 +1320,36 @@ Currently an on-site Full Stack Developer Intern at AutoWhat building Next.js 15
       const metricCards = document.querySelectorAll('.metric-card');
       if (!metricCards.length) return;
 
-      const observer = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const numEl = entry.target.querySelector('.metric-number');
-            if (numEl && !numEl.classList.contains('counted')) {
-              numEl.classList.add('counted');
-              animateCount(numEl);
-            }
-            obs.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.35 });
+      function triggerCount(card) {
+        const numEl = card.querySelector('.metric-number');
+        if (numEl && !numEl.classList.contains('counted')) {
+          numEl.classList.add('counted');
+          animateCount(numEl);
+        }
+      }
 
-      metricCards.forEach(card => observer.observe(card));
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries, obs) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              triggerCount(entry.target);
+              obs.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.05, rootMargin: '80px 0px 80px 0px' });
+
+        metricCards.forEach(card => observer.observe(card));
+      } else {
+        metricCards.forEach(card => triggerCount(card));
+      }
+
+      // Immediately trigger for cards already visible in viewport on page load
+      metricCards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          triggerCount(card);
+        }
+      });
 
       function animateCount(el) {
         const target = parseFloat(el.getAttribute('data-target')) || 0;

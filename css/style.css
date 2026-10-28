@@ -2540,21 +2540,24 @@ html[data-theme="light"] .skill-pill.featured {
   box-shadow: var(--shadow-card-hover);
 }
 
-html[data-theme="light"] .metric-number {
-  background: linear-gradient(135deg, #1e1b4b 20%, #7c3aed 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
 .metric-number {
   font-family: var(--font-mono);
   font-size: 2.35rem;
   font-weight: 800;
-  color: var(--text-white);
+  color: #ffffff;
   line-height: 1.1;
   margin-bottom: 0.5rem;
-  background: linear-gradient(135deg, #ffffff 30%, #c4b5fd 100%);
+  background: linear-gradient(135deg, #ffffff 40%, #c4b5fd 100%);
   -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html[data-theme="light"] .metric-number {
+  color: #0f172a;
+  background: linear-gradient(135deg, #0f172a 20%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 

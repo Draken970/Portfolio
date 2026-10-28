@@ -21,13 +21,13 @@
   <!-- Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
 
-  <!-- Zero-flicker Theme Detection & Application -->
+  <!-- Zero-flicker Theme Detection & Application (Default strictly to Dark Theme) -->
   <script>
     (function() {
       try {
         var savedTheme = localStorage.getItem('portfolio-theme');
-        var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-        var theme = savedTheme ? savedTheme : (prefersLight ? 'light' : 'dark');
+        // Only switch to light theme if the user explicitly chose it previously
+        var theme = savedTheme === 'light' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', theme);
       } catch (e) {
         document.documentElement.setAttribute('data-theme', 'dark');
@@ -216,25 +216,25 @@
     <div class="container">
       <div class="metrics-grid">
         <div class="metric-card">
-          <div class="metric-number" data-target="15" data-suffix="+">0+</div>
+          <div class="metric-number" data-target="15" data-suffix="+">15+</div>
           <div class="metric-label">RTSP Edge Streams</div>
           <div class="metric-sub">Multi-camera YOLOv8 & ByteTrack tracking via NetBird VPN</div>
         </div>
 
         <div class="metric-card">
-          <div class="metric-number" data-target="100" data-prefix="<" data-suffix="ms"><0ms</div>
+          <div class="metric-number" data-target="100" data-prefix="<" data-suffix="ms">&lt;100ms</div>
           <div class="metric-label">Real-Time Sync Latency</div>
           <div class="metric-sub">Socket.io WebSocket cluster with Redis Pub/Sub events</div>
         </div>
 
         <div class="metric-card">
-          <div class="metric-number" data-target="100" data-suffix="%">0%</div>
+          <div class="metric-number" data-target="100" data-suffix="%">100%</div>
           <div class="metric-label">Race-Condition Prevention</div>
           <div class="metric-sub">Atomic Redis SET NX distributed locks with TTL auto-expiry</div>
         </div>
 
         <div class="metric-card">
-          <div class="metric-number" data-target="99" data-suffix=".9%">0.0%</div>
+          <div class="metric-number" data-target="99" data-suffix=".9%">99.9%</div>
           <div class="metric-label">Production ERP Reliability</div>
           <div class="metric-sub">Next.js 15 enterprise distribution & automated ledger</div>
         </div>
