@@ -20,6 +20,20 @@
 
   <!-- Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
+
+  <!-- Zero-flicker Theme Detection & Application -->
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('portfolio-theme');
+        var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+        var theme = savedTheme ? savedTheme : (prefersLight ? 'light' : 'dark');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
 </head>
 <body>
 
@@ -44,6 +58,25 @@
         <a href="#skills" class="nav-link">Skills</a>
         <a href="#contact" class="nav-link">Contact</a>
         <div class="nav-mobile-extras">
+          <button id="theme-toggle-mobile-btn" class="btn-theme-mobile" title="Switch Theme" aria-label="Toggle Theme">
+            <span class="theme-mobile-icons">
+              <svg class="theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+              <svg class="theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+            </span>
+            <span class="theme-mobile-label">Theme: Dark Mode</span>
+          </button>
           <button class="btn-terminal-mobile" title="Open Interactive CLI Terminal">
             <span>&gt;_</span> Open CLI Terminal
           </button>
@@ -55,6 +88,22 @@
       </nav>
 
       <div class="nav-actions">
+        <button id="theme-toggle-btn" class="btn-theme-toggle" title="Switch Theme" aria-label="Toggle Theme">
+          <svg class="theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
         <button id="bgm-toggle-btn" class="btn-bgm-toggle" title="Play / Pause Background Music" aria-label="Toggle Background Music">
           <svg class="music-note-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M9 18V5l12-2v13"></path>
@@ -131,7 +180,7 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
                 <span>Work Experience</span>
               </a>
-              <a href="https://github.com/Draken970" target="_blank" rel="noopener noreferrer" class="btn-hero-secondary" style="border-color: rgba(255,255,255,0.15);">
+              <a href="https://github.com/Draken970" target="_blank" rel="noopener noreferrer" class="btn-hero-secondary">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
                 <span>GitHub</span>
               </a>
@@ -194,16 +243,108 @@
   </section>
 
   <!-- ======================================================================
-       About / Overview Section (3D Tilt Cards)
+       About / Overview Section (3D Tilt Profile Showcase + Domain Cards)
        ====================================================================== -->
   <section id="about" class="section-wrapper">
     <div class="container">
       <p class="section-subtext">Introduction</p>
       <h2 class="section-headtext">Overview<span class="purple-dot">.</span></h2>
       
-      <p class="section-desc">
-        I am a <strong>recent graduate (2026)</strong> from St. Francis Institute of Technology (SFIT), Mumbai, and currently an <strong>on-site Full Stack Developer Intern at AutoWhat</strong>. I specialize in building production systems with <strong>Next.js 15, TypeScript, Node.js and MongoDB</strong>, while deploying high-throughput AI services into real-world applications — from <strong>YOLOv8 edge tracking</strong> across 15+ RTSP cameras to <strong>Redis atomic locking</strong> eliminating race conditions across concurrent users.
-      </p>
+      <!-- About Spotlight Layout: 3D Holographic Photo Card + Bio & Highlights -->
+      <div class="about-spotlight-layout">
+        
+        <!-- 3D Holographic Profile Photo Card -->
+        <div class="about-photo-wrapper about-photo-card" data-tilt>
+          <div class="about-photo-inner">
+            <div class="about-photo-frame">
+              <img src="assets/images/sarvesh.jpg?v=2" alt="Sarvesh Wadkar — Full Stack & AI Systems Engineer" class="about-photo-img" loading="eager">
+              <div class="about-photo-overlay"></div>
+              
+              <!-- Floating Live Status Badge -->
+              <div class="about-status-badge">
+                <span class="status-pulse-dot"></span>
+                <span>Intern @ AutoWhat</span>
+              </div>
+
+              <!-- Tech Tag Corner Pill -->
+              <div class="about-tech-tag">SFIT '26</div>
+            </div>
+
+            <div class="about-photo-caption">
+              <div class="about-caption-name">Sarvesh Wadkar</div>
+              <div class="about-caption-role">AI Full-Stack Systems Engineer</div>
+              <div class="about-caption-location">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span>Mumbai, India</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bio Story & Key Accreditations -->
+        <div class="about-content-column">
+          <p class="section-desc">
+            I am a <strong>recent graduate (2026)</strong> from St. Francis Institute of Technology (SFIT), Mumbai, and currently an <strong>on-site Full Stack Developer Intern at AutoWhat</strong>. I specialize in building production systems with <strong>Next.js 15, TypeScript, Node.js and MongoDB</strong>, while deploying high-throughput AI services into real-world applications — from <strong>YOLOv8 edge tracking</strong> across 15+ RTSP cameras to <strong>Redis atomic locking</strong> eliminating race conditions across concurrent users.
+          </p>
+
+          <!-- Key Highlights Grid -->
+          <div class="about-highlights-grid">
+            <div class="about-highlight-item">
+              <div class="highlight-icon purple">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              </div>
+              <div class="highlight-text">
+                <span class="highlight-title">Education</span>
+                <span class="highlight-detail">SFIT, Mumbai (Graduating 2026)</span>
+              </div>
+            </div>
+
+            <div class="about-highlight-item">
+              <div class="highlight-icon emerald">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              </div>
+              <div class="highlight-text">
+                <span class="highlight-title">Current Role</span>
+                <span class="highlight-detail">Full Stack Intern @ AutoWhat</span>
+              </div>
+            </div>
+
+            <div class="about-highlight-item">
+              <div class="highlight-icon cyan">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <div class="highlight-text">
+                <span class="highlight-title">Real-Time Core</span>
+                <span class="highlight-detail">Redis SET NX Locks &amp; &lt;100ms WebSockets</span>
+              </div>
+            </div>
+
+            <div class="about-highlight-item">
+              <div class="highlight-icon amber">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="12 8 8 12 12 16 16 12 12 8"/></svg>
+              </div>
+              <div class="highlight-text">
+                <span class="highlight-title">Edge AI Pipelines</span>
+                <span class="highlight-detail">YOLOv8 + ByteTrack on 15+ RTSP Cameras</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="about-actions-row">
+            <a href="https://drive.google.com/file/d/1KOlCKIPTA4m3qXLN1r_ubqgrEQaBaO2d/view?usp=drivesdk" target="_blank" rel="noopener noreferrer" class="btn-about-resume">
+              <span>View Full Resume (PDF)</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+            </a>
+            <a href="#contact" class="btn-about-contact">
+              <span>Get In Touch</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+          </div>
+
+        </div>
+
+      </div>
 
       <!-- 4 3D Tilt Cards -->
       <div class="overview-grid">
@@ -990,6 +1131,12 @@ export default async function InventoryPage() {
         <!-- 3D Earth Globe Canvas -->
         <div class="contact-3d-earth-container">
           <canvas id="contact-earth-canvas"></canvas>
+          
+          <!-- Interaction Hint -->
+          <div class="contact-globe-hint">
+            <span class="hint-dot"></span>
+            <span>Interactive 3D Earth · Drag to Rotate</span>
+          </div>
         </div>
 
       </div>
@@ -1025,6 +1172,7 @@ export default async function InventoryPage() {
           <span class="term-chip" data-cmd="architecture">architecture</span>
           <span class="term-chip" data-cmd="contact">contact</span>
           <span class="term-chip" data-cmd="resume">resume</span>
+          <span class="term-chip" data-cmd="theme">theme</span>
           <span class="term-chip" data-cmd="clear">clear</span>
         </div>
 
